@@ -1,0 +1,61 @@
+{
+  "directoryPath": "./presentation/features/sidenav",
+  "files": [
+    {
+      "filePath": "./presentation/features/sidenav/SideNav.tsx",
+      "classes": [
+        {
+          "classes": {
+            "className": "is Function",
+            "method": [
+              {
+                "methodName": "TitleInputDialog",
+                "role": "",
+                "accessModifier": "",
+                "staticFlag": false,
+                "abstractFlag": false,
+                "asyncFlag": false,
+                "decorators": [
+                  "is Function"
+                ],
+                "args": [
+                  {
+                    "argName": "{\n  open, title, label, value, onChange, onConfirm, onClose,\n}",
+                    "argType": "{\n  open: boolean; title: string; label: string;\n  value: string; onChange: (v: string) => void;\n  onConfirm: () => void; onClose: () => void;\n}",
+                    "argDefaultValue": "",
+                    "argOptional": false
+                  }
+                ],
+                "returnType": "any",
+                "methodStartRow": 40,
+                "methodEndRow": 68
+              },
+              {
+                "methodName": "SideNav",
+                "role": "",
+                "accessModifier": "",
+                "staticFlag": false,
+                "abstractFlag": false,
+                "asyncFlag": false,
+                "decorators": [
+                  "is Function"
+                ],
+                "args": [
+                  {
+                    "argName": "{ connectionId, tableName }",
+                    "argType": "SideNavProps",
+                    "argDefaultValue": "",
+                    "argOptional": false
+                  }
+                ],
+                "returnType": "any",
+                "methodStartRow": 70,
+                "methodEndRow": 327
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

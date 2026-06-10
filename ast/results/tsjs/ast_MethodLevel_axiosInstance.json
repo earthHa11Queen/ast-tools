@@ -1,0 +1,16 @@
+{
+  "directoryPath": "./infrastructure",
+  "files": [
+    {
+      "filePath": "./infrastructure/theme.ts",
+      "classes": [
+        {
+          "classes": {
+            "className": "is Function",
+            "method": []
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "directoryPath": "C:/Users/acrow/git/github/test-automation/playwright_project/target_app/excel-like-deb-editor-dev-app/frontend",
+  "files": [
+    {
+      "filePath": "./vite.config.ts",
+      "classes": [
+        {
+          "classes": {
+            "className": "is Function",
+            "method": []
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,185 @@
+{
+  "directoryPath": "./adapter/api",
+  "files": [
+    {
+      "filePath": "./adapter/api/axiosInstance.ts",
+      "classes": [
+        {
+          "classes": {
+            "className": "is Function",
+            "method": []
+          }
+        }
+      ]
+    },
+    {
+      "filePath": "./adapter/api/connectionApi.ts",
+      "classes": [
+        {
+          "classes": {
+            "className": "is Function",
+            "method": []
+          }
+        }
+      ]
+    },
+    {
+      "filePath": "./adapter/api/exportApi.ts",
+      "classes": [
+        {
+          "classes": {
+            "className": "is Function",
+            "method": [
+              {
+                "methodName": "exportRows",
+                "role": "/**\n * クライアントサイドでグリッドの現在表示データを即時DL（未保存の編集内容も対象）\n */",
+                "accessModifier": "export",
+                "staticFlag": false,
+                "abstractFlag": false,
+                "asyncFlag": false,
+                "decorators": [
+                  "is Function"
+                ],
+                "args": [
+                  {
+                    "argName": "tableName",
+                    "argType": "string",
+                    "argDefaultValue": "",
+                    "argOptional": false
+                  },
+                  {
+                    "argName": "columns",
+                    "argType": "string[]",
+                    "argDefaultValue": "",
+                    "argOptional": false
+                  },
+                  {
+                    "argName": "rows",
+                    "argType": "Record<string, unknown>[]",
+                    "argDefaultValue": "",
+                    "argOptional": false
+                  },
+                  {
+                    "argName": "format",
+                    "argType": "ExportFormat",
+                    "argDefaultValue": "",
+                    "argOptional": false
+                  }
+                ],
+                "returnType": "void",
+                "methodStartRow": 32,
+                "methodEndRow": 79
+              },
+              {
+                "methodName": "toCsvLine",
+                "role": "",
+                "accessModifier": "",
+                "staticFlag": false,
+                "abstractFlag": false,
+                "asyncFlag": false,
+                "decorators": [
+                  "is Function"
+                ],
+                "args": [
+                  {
+                    "argName": "fields",
+                    "argType": "string[]",
+                    "argDefaultValue": "",
+                    "argOptional": false
+                  }
+                ],
+                "returnType": "string",
+                "methodStartRow": 81,
+                "methodEndRow": 90
+              },
+              {
+                "methodName": "download",
+                "role": "",
+                "accessModifier": "",
+                "staticFlag": false,
+                "abstractFlag": false,
+                "asyncFlag": false,
+                "decorators": [
+                  "is Function"
+                ],
+                "args": [
+                  {
+                    "argName": "blob",
+                    "argType": "Blob",
+                    "argDefaultValue": "",
+                    "argOptional": false
+                  },
+                  {
+                    "argName": "filename",
+                    "argType": "string",
+                    "argDefaultValue": "",
+                    "argOptional": false
+                  }
+                ],
+                "returnType": "void",
+                "methodStartRow": 92,
+                "methodEndRow": 99
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "filePath": "./adapter/api/importApi.ts",
+      "classes": [
+        {
+          "classes": {
+            "className": "is Function",
+            "method": [
+              {
+                "methodName": "detectFileKind",
+                "role": "",
+                "accessModifier": "export",
+                "staticFlag": false,
+                "abstractFlag": false,
+                "asyncFlag": false,
+                "decorators": [
+                  "is Function"
+                ],
+                "args": [
+                  {
+                    "argName": "file",
+                    "argType": "File",
+                    "argDefaultValue": "",
+                    "argOptional": false
+                  }
+                ],
+                "returnType": "import(\"C:/Users/acrow/git/github/test-automation/playwright_project/target_app/excel-like-deb-editor-dev-app/frontend/src/adapter/api/importApi\").FileKind",
+                "methodStartRow": 12,
+                "methodEndRow": 19
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "filePath": "./adapter/api/memoApi.ts",
+      "classes": [
+        {
+          "classes": {
+            "className": "is Function",
+            "method": []
+          }
+        }
+      ]
+    },
+    {
+      "filePath": "./adapter/api/tableApi.ts",
+      "classes": [
+        {
+          "classes": {
+            "className": "is Function",
+            "method": []
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "directoryPath": "./presentation/features/history",
+  "files": [
+    {
+      "filePath": "./presentation/features/history/HistoryListDialog.tsx",
+      "classes": [
+        {
+          "classes": {
+            "className": "is Function",
+            "method": [
+              {
+                "methodName": "HistoryListDialog",
+                "role": "",
+                "accessModifier": "",
+                "staticFlag": false,
+                "abstractFlag": false,
+                "asyncFlag": false,
+                "decorators": [
+                  "is Function"
+                ],
+                "args": [
+                  {
+                    "argName": "{\n  open,\n  historyList,\n  historyPointer,\n  onRestore,\n  onClose,\n}",
+                    "argType": "HistoryListDialogProps",
+                    "argDefaultValue": "",
+                    "argOptional": false
+                  }
+                ],
+                "returnType": "any",
+                "methodStartRow": 22,
+                "methodEndRow": 66
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

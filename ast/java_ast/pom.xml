@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- ===== プロジェクト基本情報 ===== -->
+  <groupId>com.ast_tool</groupId>
+  <artifactId>java-ast</artifactId>
+  <version>1.0.0</version>
+  <packaging>jar</packaging>
+
+  <properties>
+    <java.version>17</java.version>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!-- ライブラリバージョン管理 -->
+    <javaparser.version>3.26.1</javaparser.version>
+    <jackson.version>2.17.1</jackson.version>
+    <opencsv.version>5.9</opencsv.version>
+    <!-- セキュリティ: opencsv の依存チェーン経由の脆弱性対策 -->
+    <!-- opencsv -> commons-beanutils の古いバージョンを上書き固定する -->
+    <commons-beanutils.version>1.9.4</commons-beanutils.version>
+  </properties>
+
+  <dependencies>
+
+    <!-- ===== JavaParser: Javaソースを構文解析するコア ===== -->
+    <!--
+      デュアルライセンス: Apache License 2.0 または LGPL-3.0
+      本プロジェクトでは Apache License 2.0 を選択して使用する。
+      Dual-licensed: Apache-2.0 OR LGPL-3.0
+      This project uses JavaParser under Apache License 2.0.
+    -->
+    <dependency>
+      <groupId>com.github.javaparser</groupId>
+      <artifactId>javaparser-core</artifactId>
+      <version>${javaparser.version}</version>
+    </dependency>
+
+    <!-- シンボル解決が必要な場合に追加（戻り値型の完全修飾名取得など） -->
+    <!-- Apache License 2.0 を選択して使用 / Used under Apache License 2.0 -->
+    <dependency>
+      <groupId>com.github.javaparser</groupId>
+      <artifactId>javaparser-symbol-solver-core</artifactId>
+      <version>${javaparser.version}</version>
+    </dependency>
+
+    <!-- ===== Jackson: JSONファイル出力に使用 ===== -->
+    <!-- License: Apache-2.0 -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+
+    <!-- ===== OpenCSV: CSVファイル出力に使用 ===== -->
+    <!-- License: Apache-2.0 -->
+    <!--
+      opencsv 5.9 は commons-beanutils 経由で古い commons-collections への
+      推移的依存を持つ場合がある。下記の明示的依存により安全なバージョンに固定する。
+      opencsv 5.9 may transitively depend on an older commons-collections via
+      commons-beanutils. The explicit dependency below pins it to a safe version.
+    -->
+    <dependency>
+      <groupId>com.opencsv</groupId>
+      <artifactId>opencsv</artifactId>
+      <version>${opencsv.version}</version>
+    </dependency>
+
+    <!-- ===== セキュリティ: 推移的依存のバージョン固定 ===== -->
+    <!--
+      opencsv が依存する commons-beanutils を明示的に固定し、
+      古いバージョンへの推移的解決を防ぐ。
+      Explicitly pins commons-beanutils to prevent transitive resolution
+      to older vulnerable versions pulled in via opencsv.
+    -->
+    <dependency>
+      <groupId>commons-beanutils</groupId>
+      <artifactId>commons-beanutils</artifactId>
+      <version>${commons-beanutils.version}</version>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+
+      <!-- ===== Mavenコンパイラ設定 ===== -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.13.0</version>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+          <encoding>UTF-8</encoding>
+        </configuration>
+      </plugin>
+
+      <!-- ===== 実行可能なfat jar（uber jar）を作るプラグイン ===== -->
+      <!-- 依存ライブラリを全部1つのjarに詰め込む -->
+      <!-- これにより java -jar java-ast-1.0.0-with-dependencies.jar だけで実行できる -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.5.3</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <transformers>
+                <!-- mainクラスをMANIFEST.MFに指定 -->
+                <transformer implementation=
+                  "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>com.ast_tool.Main</mainClass>
+                </transformer>
+              </transformers>
+              <!-- オリジナルjarと区別するためのサフィックス -->
+              <shadedArtifactAttached>true</shadedArtifactAttached>
+              <shadedClassifierName>with-dependencies</shadedClassifierName>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
+  </build>
+
+</project>

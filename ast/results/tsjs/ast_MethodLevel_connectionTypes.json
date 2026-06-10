@@ -1,0 +1,54 @@
+{
+  "directoryPath": "C:/Users/acrow/git/github/test-automation/playwright_project/target_app/excel-like-deb-editor-dev-app/frontend/src",
+  "files": [
+    {
+      "filePath": "C:/Users/acrow/git/github/test-automation/playwright_project/target_app/excel-like-deb-editor-dev-app/frontend/src/App.tsx",
+      "classes": [
+        {
+          "classes": {
+            "className": "is Function",
+            "method": [
+              {
+                "methodName": "App",
+                "role": "",
+                "accessModifier": "",
+                "staticFlag": false,
+                "abstractFlag": false,
+                "asyncFlag": false,
+                "decorators": [
+                  "is Function"
+                ],
+                "args": [],
+                "returnType": "any",
+                "methodStartRow": 11,
+                "methodEndRow": 27
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "filePath": "C:/Users/acrow/git/github/test-automation/playwright_project/target_app/excel-like-deb-editor-dev-app/frontend/src/main.tsx",
+      "classes": [
+        {
+          "classes": {
+            "className": "is Function",
+            "method": []
+          }
+        }
+      ]
+    },
+    {
+      "filePath": "C:/Users/acrow/git/github/test-automation/playwright_project/target_app/excel-like-deb-editor-dev-app/frontend/src/vite-env.d.ts",
+      "classes": [
+        {
+          "classes": {
+            "className": "is Function",
+            "method": []
+          }
+        }
+      ]
+    }
+  ]
+}

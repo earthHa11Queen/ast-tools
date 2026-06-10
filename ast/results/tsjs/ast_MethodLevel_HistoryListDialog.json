@@ -1,0 +1,83 @@
+{
+  "directoryPath": "./presentation/features/diff",
+  "files": [
+    {
+      "filePath": "./presentation/features/diff/ConflictDiffDialog.tsx",
+      "classes": [
+        {
+          "classes": {
+            "className": "is Function",
+            "method": [
+              {
+                "methodName": "dataOf",
+                "role": "/** side フィールドを除いたデータ部分を返す */",
+                "accessModifier": "",
+                "staticFlag": false,
+                "abstractFlag": false,
+                "asyncFlag": false,
+                "decorators": [
+                  "is Function"
+                ],
+                "args": [
+                  {
+                    "argName": "row",
+                    "argType": "DiffRow",
+                    "argDefaultValue": "",
+                    "argOptional": false
+                  }
+                ],
+                "returnType": "Record<string, unknown>",
+                "methodStartRow": 34,
+                "methodEndRow": 36
+              },
+              {
+                "methodName": "pairDiff",
+                "role": "/** Diffデータを before/after ペアに変換する。\n *  PKが不明なため、before と after を出現順にペアリングする。\n *  余った行は片側のみのペアとして扱う。\n */",
+                "accessModifier": "",
+                "staticFlag": false,
+                "abstractFlag": false,
+                "asyncFlag": false,
+                "decorators": [
+                  "is Function"
+                ],
+                "args": [
+                  {
+                    "argName": "rows",
+                    "argType": "DiffRow[]",
+                    "argDefaultValue": "",
+                    "argOptional": false
+                  }
+                ],
+                "returnType": "DiffPair[]",
+                "methodStartRow": 42,
+                "methodEndRow": 51
+              },
+              {
+                "methodName": "ConflictDiffDialog",
+                "role": "",
+                "accessModifier": "exportdefault",
+                "staticFlag": false,
+                "abstractFlag": false,
+                "asyncFlag": false,
+                "decorators": [
+                  "is Function"
+                ],
+                "args": [
+                  {
+                    "argName": "{\n  open,\n  diffRows,\n  onResolve,\n  onClose,\n}",
+                    "argType": "ConflictDiffDialogProps",
+                    "argDefaultValue": "",
+                    "argOptional": false
+                  }
+                ],
+                "returnType": "any",
+                "methodStartRow": 53,
+                "methodEndRow": 170
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

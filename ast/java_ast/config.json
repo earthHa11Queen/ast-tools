@@ -1,0 +1,11 @@
+{
+    "extensions": [".java"],
+    "csvFilename": "ast_result.csv",
+    "markdownFilename": "ast_result.md",
+    "jsonFilename": "ast_result.json",
+    "DefaultOutputDir": "YOUR RESULT PATH",
+    "TargetAppDir": "YOUR APP PATH",
+    "targetAppName": "example: excel-like-deb-editor-app",
+    "encoding": "utf-8"
+}
+

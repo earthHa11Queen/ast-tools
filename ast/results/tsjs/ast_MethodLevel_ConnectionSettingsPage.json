@@ -1,0 +1,161 @@
+{
+  "directoryPath": "./presentation/components",
+  "files": [
+    {
+      "filePath": "./presentation/components/AppLayout.tsx",
+      "classes": [
+        {
+          "classes": {
+            "className": "is Function",
+            "method": [
+              {
+                "methodName": "AppLayout",
+                "role": "",
+                "accessModifier": "",
+                "staticFlag": false,
+                "abstractFlag": false,
+                "asyncFlag": false,
+                "decorators": [
+                  "is Function"
+                ],
+                "args": [
+                  {
+                    "argName": "{ children }",
+                    "argType": "AppLayoutProps",
+                    "argDefaultValue": "",
+                    "argOptional": false
+                  }
+                ],
+                "returnType": "any",
+                "methodStartRow": 12,
+                "methodEndRow": 49
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "filePath": "./presentation/components/Footer.tsx",
+      "classes": [
+        {
+          "classes": {
+            "className": "is Function",
+            "method": [
+              {
+                "methodName": "Footer",
+                "role": "",
+                "accessModifier": "",
+                "staticFlag": false,
+                "abstractFlag": false,
+                "asyncFlag": false,
+                "decorators": [
+                  "is Function"
+                ],
+                "args": [],
+                "returnType": "any",
+                "methodStartRow": 3,
+                "methodEndRow": 21
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "filePath": "./presentation/components/Header.tsx",
+      "classes": [
+        {
+          "classes": {
+            "className": "is Function",
+            "method": [
+              {
+                "methodName": "Header",
+                "role": "",
+                "accessModifier": "",
+                "staticFlag": false,
+                "abstractFlag": false,
+                "asyncFlag": false,
+                "decorators": [
+                  "is Function"
+                ],
+                "args": [
+                  {
+                    "argName": "{ isTableEditPage, currentTableName }",
+                    "argType": "HeaderProps",
+                    "argDefaultValue": "",
+                    "argOptional": false
+                  }
+                ],
+                "returnType": "any",
+                "methodStartRow": 55,
+                "methodEndRow": 604
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "filePath": "./presentation/components/LoadingOverlay.tsx",
+      "classes": [
+        {
+          "classes": {
+            "className": "is Function",
+            "method": [
+              {
+                "methodName": "LoadingOverlay",
+                "role": "",
+                "accessModifier": "",
+                "staticFlag": false,
+                "abstractFlag": false,
+                "asyncFlag": false,
+                "decorators": [
+                  "is Function"
+                ],
+                "args": [
+                  {
+                    "argName": "{ open, message }",
+                    "argType": "LoadingOverlayProps",
+                    "argDefaultValue": "",
+                    "argOptional": false
+                  }
+                ],
+                "returnType": "any",
+                "methodStartRow": 8,
+                "methodEndRow": 15
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "filePath": "./presentation/components/ScrollToTop.tsx",
+      "classes": [
+        {
+          "classes": {
+            "className": "is Function",
+            "method": [
+              {
+                "methodName": "ScrollToTop",
+                "role": "",
+                "accessModifier": "",
+                "staticFlag": false,
+                "abstractFlag": false,
+                "asyncFlag": false,
+                "decorators": [
+                  "is Function"
+                ],
+                "args": [],
+                "returnType": "any",
+                "methodStartRow": 5,
+                "methodEndRow": 27
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
