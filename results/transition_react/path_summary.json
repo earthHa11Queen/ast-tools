@@ -1,0 +1,18 @@
+{
+  "appName": "spreadsheet-like-db-editor",
+  "startPath": "/",
+  "maxCost": 3,
+  "forward": {
+    "total": 9,
+    "単体テスト": 0,
+    "結合テスト": 8,
+    "総合テスト": 1
+  },
+  "reverse": {
+    "total": 1,
+    "単体テスト": 0,
+    "結合テスト": 1,
+    "総合テスト": 0
+  },
+  "unresolvedPaths": []
+}

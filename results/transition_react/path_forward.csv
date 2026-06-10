@@ -1,0 +1,10 @@
+﻿cost,fromPath,toPath,testPhase
+1,/,/tables/_select,結合テスト
+1,/,/connections/settings,結合テスト
+1,/,/tables/,結合テスト
+1,/,/import,結合テスト
+1,/,/export,結合テスト
+2,/,/import/new-table,結合テスト
+2,/,/import/mapping,結合テスト
+2,/,/export/done,結合テスト
+3,/,/import/done,総合テスト
