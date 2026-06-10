@@ -30,7 +30,9 @@ for AI-assisted test scenario generation.
 
 ---
 
-## Supported Languages
+## Supported Languages / Parsers
+
+### Source Code Parser (tsjs_ast / java_ast)
 
 | Language | Status |
 |---|---|
@@ -41,42 +43,56 @@ for AI-assisted test scenario generation.
 | Go | 🔲 Planned |
 | HTML / CSS | 🔲 Planned |
 
+### Screen Transition Parser (transition_react)
+
+| Framework | Status |
+|---|---|
+| React (React Router v6) | ✅ Implemented (ts-morph) |
+| Vue | 🔲 Planned |
+| Angular | 🔲 Planned |
+
 ---
 
 ## Repository Structure
 
 ```
 ast-tools/
-├── commonConfig.json          # Shared configuration (output dir, encoding, supported languages)
-├── tsjs_ast/                  # TypeScript / JavaScript parser
-│   ├── config.ts              # ⚙️ User configuration — set your paths here
-│   ├── main.ts                # Entry point
+├── commonConfig.json               # Shared configuration
+├── tsjs_ast/                       # TypeScript / JavaScript source parser
+│   ├── config.ts                   # ⚙️ User configuration — set your paths here
+│   ├── main.ts
 │   └── src/
-│       ├── parser.ts          # Core AST parsing logic (ts-morph)
-│       ├── method_info.ts     # Type definitions
-│       ├── json_output.ts     # JSON output
-│       ├── csv_output.ts      # CSV output
-│       └── markdown_output.ts # Markdown output
-├── java_ast/                  # Java parser
-│   ├── config.json            # ⚙️ User configuration — set your paths here
-│   ├── memo.md                # Build and run instructions
+│       ├── parser.ts
+│       ├── method_info.ts
+│       ├── json_output.ts
+│       ├── csv_output.ts
+│       └── markdown_output.ts
+├── java_ast/                       # Java source parser
+│   ├── config.json                 # ⚙️ User configuration — set your paths here
 │   └── src/main/java/com/ast_tool/
-│       ├── Main.java
-│       ├── AppConfig.java
-│       ├── parser/JavaAstParser.java
-│       ├── model/MethodInfo.java
-│       └── output/            # CSV / JSON / Markdown output
+├── transition_react/               # Screen transition parser (React Router v6)
+│   ├── config.ts                   # ⚙️ User configuration — set your paths here
+│   ├── main.ts
+│   └── src/
+│       ├── types.ts
+│       ├── RouteDefinitionParser.ts
+│       ├── TransitionExtractor.ts
+│       ├── AdjacencyTableBuilder.ts
+│       ├── PathTableBuilder.ts
+│       ├── PathCostClassifier.ts
+│       └── AdjacencyOutputWriter.ts
 ├── exec_shells/
-│   └── all_exec.sh            # Run both parsers sequentially
+│   └── all_exec.sh
 └── results/
-    └── tsjs/                  # Sample output — spreadsheet-like-db-editor analysis
+    ├── tsjs/                       # Sample output — spreadsheet-like-db-editor (source analysis)
+    └── transition_react/           # Sample output — spreadsheet-like-db-editor (screen transitions)
 ```
 
 ---
 
 ## Getting Started
 
-### TypeScript / JavaScript
+### TypeScript / JavaScript Source Parser
 
 **Prerequisites:** Node.js 18+
 
@@ -88,9 +104,9 @@ npm install
 Edit `config.ts`:
 
 ```typescript
-export const TARGET_APP_DIR = "YOUR APP PATH";       // Path to the app you want to analyze
-export const DEFAULT_OUTPUT_DIR = "../results/tsjs"; // Output directory
-export const TARGET_APP_NAME = "your-app-name";      // Label used in output files
+export const TARGET_APP_DIR = "YOUR APP PATH";
+export const DEFAULT_OUTPUT_DIR = "../results/tsjs";
+export const TARGET_APP_NAME = "your-app-name";
 ```
 
 Run:
@@ -101,7 +117,7 @@ npx ts-node main.ts
 
 ---
 
-### Java
+### Java Source Parser
 
 **Prerequisites:** Java 17+, Maven 3.8+
 
@@ -127,7 +143,49 @@ java -Dfile.encoding=UTF-8 -jar target/java-ast-1.0.0-with-dependencies.jar ./co
 
 ---
 
-### Run both parsers
+### Screen Transition Parser (React)
+
+**Prerequisites:** Node.js 18+
+
+```bash
+cd transition_react
+npm install
+```
+
+Edit `config.ts`:
+
+```typescript
+export const TARGET_APP_DIR = "YOUR APP PATH";        // Path to the React app's src directory
+export const DEFAULT_OUTPUT_DIR = "../results/transition_react";
+export const TARGET_APP_NAME = "your-app-name";
+export const START_PATH = "/";                        // Entry point path
+```
+
+Run:
+
+```bash
+npx ts-node main.ts
+```
+
+#### Output files
+
+| File | Contents |
+|---|---|
+| `adjacency_table.csv` | All screen transition edges (from/to path, component, transition type) |
+| `path_forward.csv` | Forward paths from start — with cost and test phase |
+| `path_reverse.csv` | Reverse paths back to start — with cost and test phase |
+| `path_summary.json` | maxCost, total paths per phase, unresolved paths |
+
+#### Path cost and test phase
+
+| Cost | Test Phase |
+|---|---|
+| 1 to (maxCost - 1) | Integration test |
+| maxCost | System test |
+
+---
+
+### Run all parsers
 
 ```bash
 chmod +x exec_shells/all_exec.sh
@@ -138,11 +196,19 @@ chmod +x exec_shells/all_exec.sh
 
 ## Sample Output
 
-`results/tsjs/` contains analysis output of
+`results/tsjs/` contains method-level analysis of
 [spreadsheet-like-db-editor](https://github.com/earthHa11Queen/spreadsheet-like-db-editor)
 (frontend TypeScript).
 
-This demonstrates the toolkit's output against a real application.
+`results/transition_react/` contains screen transition analysis of the same application.
+
+```
+path_summary.json (spreadsheet-like-db-editor):
+  maxCost: 3
+  forward: 9 paths (8 integration, 1 system)
+  reverse: 1 path
+  unresolvedPaths: []
+```
 
 ---
 
@@ -152,10 +218,18 @@ This toolkit sits in the middle of a larger pipeline:
 
 ```
 Your application source code
-    ↓  ast-tools (this repository)
+    ↓  ast-tools — tsjs_ast / java_ast
 Structured method data (JSON / CSV)
     ↓  mirror-framework
 Test scenarios via boolean / domain operations
+    ↓  playwright-framework-guide
+Playwright E2E test implementation
+
+Your application source code
+    ↓  ast-tools — transition_react
+Adjacency table + path table (CSV)
+    ↓  mirror-framework
+Screen transition test scenarios
     ↓  playwright-framework-guide
 Playwright E2E test implementation
 ```
@@ -168,7 +242,7 @@ as a foundation for VPSY — a computational model for psychodynamics.
 
 ## Dependencies
 
-### TypeScript / JavaScript (tsjs_ast)
+### tsjs_ast
 
 | Package | Version | License |
 |---|---|---|
@@ -177,7 +251,7 @@ as a foundation for VPSY — a computational model for psychodynamics.
 | typescript | ^5.5.0 | Apache-2.0 |
 | ts-node | ^10.9.1 | MIT |
 
-### Java (java_ast)
+### java_ast
 
 | Package | Version | License |
 |---|---|---|
@@ -186,11 +260,26 @@ as a foundation for VPSY — a computational model for psychodynamics.
 | jackson-databind | latest | Apache-2.0 |
 | opencsv | latest | Apache-2.0 |
 
+### transition_react
+
+| Package | Version | License |
+|---|---|---|
+| ts-morph | ^18.0.0 | MIT |
+| typescript | ^5.5.0 | Apache-2.0 |
+| ts-node | ^10.9.1 | MIT |
+
 ---
 
 ## License
 
 [MIT](./LICENSE)
+
+---
+
+## Security
+
+For dependency license details and known issues,
+see [SECURITY.md](./SECURITY.md).
 
 ---
 
@@ -203,46 +292,37 @@ as a foundation for VPSY — a computational model for psychodynamics.
 | [spreadsheet-like-db-editor](https://github.com/earthHa11Queen/spreadsheet-like-db-editor) | Sample application used to generate the results in this repository |
 | [vpsy-concept](https://github.com/earthHa11Queen/vpsy-concept) | The root concept behind this architecture |
 
-## Security
-
-For dependency license details and known issues (including opencsv transitive
-dependency mitigation), see [SECURITY.md](./SECURITY.md).
-
 ---
 
 ---
 
 # ast-tools（日本語）
 
-TypeScript/JavaScript・Javaのソースコードをいず解析し、
-メソッド・クラス情報をJSON/CSV/Markdown形式で出力する静的解析ツール群です。
+TypeScript/JavaScript・Javaのソースコードと、ReactアプリケーションのUI画面遷移を解析し、
+テスト設計・AI入力前処理のためのデータを出力する静的解析ツール群です。
 
-テスト設計およびAIへの入力前処理として設計されており、
-[VPSY](https://github.com/earthHa11Queen/vpsy-concept)の実現に向けた
-アーキテクチャ構想の一部です。
+[VPSY](https://github.com/earthHa11Queen/vpsy-concept)の実現に向けたアーキテクチャ構想の一部です。
 
 ---
 
 ## 概要
 
-アプリケーションのソースコードを走査し、メソッドレベルの構造情報
-（メソッド名・引数・戻り値型・行番号・アクセス修飾子）を抽出して複数形式で出力します。
+2種類のパーサーを提供します。
 
-主な用途は、[mirror-framework](https://github.com/earthHa11Queen/mirror-framework)と連携した
-AIによるテストシナリオ生成の前処理です。
+**ソースコードパーサー（tsjs_ast / java_ast）**
+アプリケーションのソースコードを走査し、メソッドレベルの構造情報を抽出して
+JSON / CSV / Markdown形式で出力します。
 
-### 出力フォーマット
-
-| フォーマット | ファイル | 用途 |
-|---|---|---|
-| JSON（アプリレベル） | `ast_result.json` | インポート・ファイルメタデータを含む完全構造 |
-| JSON（メソッドレベル） | `ast_MethodLevel_*.json` | ディレクトリ単位のメソッド詳細・AI入力の主要フォーマット |
-| CSV | `ast_result.csv` | スプレッドシートでの確認用フラット形式 |
-| Markdown | `ast_result.md` | 人が読むための概要 |
+**画面遷移パーサー（transition_react）**
+Reactアプリケーションの画面遷移を静的解析し、隣接テーブル・パステーブルを
+CSV形式で出力します。[mirror-framework](https://github.com/earthHa11Queen/mirror-framework)の
+テスト設計に使用する入力データを生成します。
 
 ---
 
-## 対応言語
+## 対応言語・フレームワーク
+
+### ソースコードパーサー
 
 | 言語 | 状態 |
 |---|---|
@@ -253,42 +333,56 @@ AIによるテストシナリオ生成の前処理です。
 | Go | 🔲 実装予定 |
 | HTML / CSS | 🔲 実装予定 |
 
+### 画面遷移パーサー
+
+| フレームワーク | 状態 |
+|---|---|
+| React（React Router v6） | ✅ 実装済み（ts-morph使用） |
+| Vue | 🔲 実装予定 |
+| Angular | 🔲 実装予定 |
+
 ---
 
 ## リポジトリ構成
 
 ```
 ast-tools/
-├── commonConfig.json          # 共通設定（出力先・エンコーディング・対応言語）
-├── tsjs_ast/                  # TypeScript / JavaScript パーサー
-│   ├── config.ts              # ⚙️ ユーザー設定 — パスをここに指定
-│   ├── main.ts                # エントリーポイント
+├── commonConfig.json               # 共通設定
+├── tsjs_ast/                       # TypeScript / JavaScript ソースコードパーサー
+│   ├── config.ts                   # ⚙️ ユーザー設定 — パスをここに指定
+│   ├── main.ts
 │   └── src/
-│       ├── parser.ts          # ASTパース処理（ts-morph）
-│       ├── method_info.ts     # 型定義
-│       ├── json_output.ts     # JSON出力
-│       ├── csv_output.ts      # CSV出力
-│       └── markdown_output.ts # Markdown出力
-├── java_ast/                  # Java パーサー
-│   ├── config.json            # ⚙️ ユーザー設定 — パスをここに指定
-│   ├── memo.md                # ビルド・実行手順メモ
+│       ├── parser.ts
+│       ├── method_info.ts
+│       ├── json_output.ts
+│       ├── csv_output.ts
+│       └── markdown_output.ts
+├── java_ast/                       # Java ソースコードパーサー
+│   ├── config.json                 # ⚙️ ユーザー設定 — パスをここに指定
 │   └── src/main/java/com/ast_tool/
-│       ├── Main.java
-│       ├── AppConfig.java
-│       ├── parser/JavaAstParser.java
-│       ├── model/MethodInfo.java
-│       └── output/            # CSV / JSON / Markdown 出力
+├── transition_react/               # 画面遷移パーサー（React Router v6専用）
+│   ├── config.ts                   # ⚙️ ユーザー設定 — パスをここに指定
+│   ├── main.ts
+│   └── src/
+│       ├── types.ts
+│       ├── RouteDefinitionParser.ts
+│       ├── TransitionExtractor.ts
+│       ├── AdjacencyTableBuilder.ts
+│       ├── PathTableBuilder.ts
+│       ├── PathCostClassifier.ts
+│       └── AdjacencyOutputWriter.ts
 ├── exec_shells/
-│   └── all_exec.sh            # 両パーサーを順番に実行
+│   └── all_exec.sh
 └── results/
-    └── tsjs/                  # サンプル出力（spreadsheet-like-db-editor解析結果）
+    ├── tsjs/                       # サンプル出力（ソースコード解析）
+    └── transition_react/           # サンプル出力（画面遷移解析）
 ```
 
 ---
 
 ## 使い方
 
-### TypeScript / JavaScript
+### TypeScript / JavaScript ソースコードパーサー
 
 **前提:** Node.js 18+
 
@@ -300,9 +394,9 @@ npm install
 `config.ts`を編集:
 
 ```typescript
-export const TARGET_APP_DIR = "YOUR APP PATH";       // 解析対象アプリのパス
-export const DEFAULT_OUTPUT_DIR = "../results/tsjs"; // 出力先ディレクトリ
-export const TARGET_APP_NAME = "your-app-name";      // 出力ファイルのラベル
+export const TARGET_APP_DIR = "YOUR APP PATH";
+export const DEFAULT_OUTPUT_DIR = "../results/tsjs";
+export const TARGET_APP_NAME = "your-app-name";
 ```
 
 実行:
@@ -313,7 +407,7 @@ npx ts-node main.ts
 
 ---
 
-### Java
+### Java ソースコードパーサー
 
 **前提:** Java 17+、Maven 3.8+
 
@@ -339,7 +433,49 @@ java -Dfile.encoding=UTF-8 -jar target/java-ast-1.0.0-with-dependencies.jar ./co
 
 ---
 
-### 両パーサーをまとめて実行
+### 画面遷移パーサー（React）
+
+**前提:** Node.js 18+
+
+```bash
+cd transition_react
+npm install
+```
+
+`config.ts`を編集:
+
+```typescript
+export const TARGET_APP_DIR = "YOUR APP PATH";        // Reactアプリのsrcディレクトリ直上を指定
+export const DEFAULT_OUTPUT_DIR = "../results/transition_react";
+export const TARGET_APP_NAME = "your-app-name";
+export const START_PATH = "/";                        // 起点パス（通常はトップページ）
+```
+
+実行:
+
+```bash
+npx ts-node main.ts
+```
+
+#### 出力ファイル
+
+| ファイル | 内容 |
+|---|---|
+| `adjacency_table.csv` | 全画面遷移エッジ（遷移元・遷移先パス、コンポーネント名、遷移種別） |
+| `path_forward.csv` | 起点からの全順行パス（コスト・テスト工程区分付き） |
+| `path_reverse.csv` | 起点への全逆行パス（コスト・テスト工程区分付き） |
+| `path_summary.json` | maxCost・工程区分ごとのパス数・未解決パスのサマリー |
+
+#### パスコストとテスト工程区分
+
+| コスト | テスト工程区分 |
+|---|---|
+| 1〜（maxCost - 1） | 結合テスト |
+| maxCost | 総合テスト |
+
+---
+
+### 全パーサーをまとめて実行
 
 ```bash
 chmod +x exec_shells/all_exec.sh
@@ -350,24 +486,37 @@ chmod +x exec_shells/all_exec.sh
 
 ## サンプル出力
 
-`results/tsjs/`には、
-[spreadsheet-like-db-editor](https://github.com/earthHa11Queen/spreadsheet-like-db-editor)
-（フロントエンドTypeScript）の解析結果が含まれています。
+`results/tsjs/`には[spreadsheet-like-db-editor](https://github.com/earthHa11Queen/spreadsheet-like-db-editor)
+のフロントエンドTypeScriptのソースコード解析結果が含まれています。
 
-実際のアプリケーションへの適用例として参照できます。
+`results/transition_react/`には同アプリケーションの画面遷移解析結果が含まれています。
+
+```
+path_summary.json（spreadsheet-like-db-editor）:
+  maxCost: 3
+  順行: 9パス（結合テスト8件・総合テスト1件）
+  逆行: 1パス
+  未解決パス: 0件
+```
 
 ---
 
 ## アーキテクチャ上の位置づけ
 
-本ツールはより大きなパイプラインの中間層に位置します。
-
 ```
 対象アプリケーションのソースコード
-    ↓  ast-tools（本リポジトリ）
+    ↓  ast-tools（tsjs_ast / java_ast）
 メソッド構造データ（JSON / CSV）
     ↓  mirror-framework
 boolean演算・ドメイン定義によるテストシナリオ算出
+    ↓  playwright-framework-guide
+Playwright E2Eテストとして実装
+
+対象アプリケーションのソースコード
+    ↓  ast-tools（transition_react）
+隣接テーブル・パステーブル（CSV）
+    ↓  mirror-framework
+画面遷移テストシナリオの算出
     ↓  playwright-framework-guide
 Playwright E2Eテストとして実装
 ```
@@ -380,7 +529,7 @@ Playwright E2Eテストとして実装
 
 ## 依存ライブラリ
 
-### TypeScript / JavaScript（tsjs_ast）
+### tsjs_ast
 
 | パッケージ | バージョン | ライセンス |
 |---|---|---|
@@ -389,7 +538,7 @@ Playwright E2Eテストとして実装
 | typescript | ^5.5.0 | Apache-2.0 |
 | ts-node | ^10.9.1 | MIT |
 
-### Java（java_ast）
+### java_ast
 
 | パッケージ | バージョン | ライセンス |
 |---|---|---|
@@ -398,11 +547,26 @@ Playwright E2Eテストとして実装
 | jackson-databind | latest | Apache-2.0 |
 | opencsv | latest | Apache-2.0 |
 
+### transition_react
+
+| パッケージ | バージョン | ライセンス |
+|---|---|---|
+| ts-morph | ^18.0.0 | MIT |
+| typescript | ^5.5.0 | Apache-2.0 |
+| ts-node | ^10.9.1 | MIT |
+
 ---
 
 ## ライセンス
 
 [MIT](./LICENSE)
+
+---
+
+## セキュリティ
+
+依存ライブラリのライセンス詳細・既知の問題については
+[SECURITY.md](./SECURITY.md) を参照してください。
 
 ---
 
@@ -414,8 +578,3 @@ Playwright E2Eテストとして実装
 | [playwright-framework-guide](https://github.com/earthHa11Queen/playwright-framework-guide) | Playwright E2Eテスト自動化システムの設計ガイド |
 | [spreadsheet-like-db-editor](https://github.com/earthHa11Queen/spreadsheet-like-db-editor) | 本リポジトリのサンプル出力の解析対象アプリ |
 | [vpsy-concept](https://github.com/earthHa11Queen/vpsy-concept) | このアーキテクチャの根幹となる構想 |
-
-## セキュリティ
-
-依存ライブラリのライセンス詳細・既知の問題（opencsv推移的依存の対処を含む）については
-[SECURITY.md](./SECURITY.md) を参照してください。
