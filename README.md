@@ -203,6 +203,11 @@ as a foundation for VPSY — a computational model for psychodynamics.
 | [spreadsheet-like-db-editor](https://github.com/earthHa11Queen/spreadsheet-like-db-editor) | Sample application used to generate the results in this repository |
 | [vpsy-concept](https://github.com/earthHa11Queen/vpsy-concept) | The root concept behind this architecture |
 
+## Security
+
+For dependency license details and known issues (including opencsv transitive
+dependency mitigation), see [SECURITY.md](./SECURITY.md).
+
 ---
 
 ---
@@ -409,3 +414,8 @@ Playwright E2Eテストとして実装
 | [playwright-framework-guide](https://github.com/earthHa11Queen/playwright-framework-guide) | Playwright E2Eテスト自動化システムの設計ガイド |
 | [spreadsheet-like-db-editor](https://github.com/earthHa11Queen/spreadsheet-like-db-editor) | 本リポジトリのサンプル出力の解析対象アプリ |
 | [vpsy-concept](https://github.com/earthHa11Queen/vpsy-concept) | このアーキテクチャの根幹となる構想 |
+
+## セキュリティ
+
+依存ライブラリのライセンス詳細・既知の問題（opencsv推移的依存の対処を含む）については
+[SECURITY.md](./SECURITY.md) を参照してください。
