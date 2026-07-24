@@ -5,7 +5,7 @@ and outputs structured method/class information as JSON, CSV, and Markdown.
 
 Designed as a preprocessing layer for test design and AI input —
 part of a larger architecture concept built toward
-[VPSY](https://github.com/earthHa11Queen/vpsy-concept).
+[VPSY](https://github.com/earthHa23Queen/vpsy-concept).
 
 ---
 
@@ -21,7 +21,7 @@ each targeting a different dimension of application structure:
 | `ui_element_react` | UI elements per screen | Page Object generation, test spec authoring |
 
 Together, these three outputs form the complete input layer for
-[mirror-framework](https://github.com/earthHa11Queen/mirror-framework)
+[mirror-framework](https://github.com/earthHa23Queen/mirror-framework)
 and AI-assisted test specification generation.
 
 ---
@@ -264,7 +264,7 @@ chmod +x exec_shells/all_exec.sh
 ## Sample Output
 
 `results/tsjs/` — method-level analysis of
-[spreadsheet-like-db-editor](https://github.com/earthHa11Queen/spreadsheet-like-db-editor)
+[spreadsheet-like-db-editor](https://github.com/earthHa23Queen/spreadsheet-like-db-editor)
 (frontend TypeScript).
 
 `results/transition_react/` — screen transition analysis of the same application.
@@ -306,7 +306,7 @@ playwright-framework-guide
 
 All repositories share a common architecture concept designed
 as a foundation for VPSY — a computational model for psychodynamics.
-→ [architecture-concept](https://github.com/earthHa11Queen) *(coming soon)*
+→ [architecture-concept](https://github.com/earthHa23Queen) *(coming soon)*
 
 ---
 
@@ -357,10 +357,10 @@ see [SECURITY.md](./SECURITY.md).
 
 | Repository | Description |
 |---|---|
-| [mirror-framework](https://github.com/earthHa11Queen/mirror-framework) | Test scenario generation using domain definition and boolean operations |
-| [playwright-framework-guide](https://github.com/earthHa11Queen/playwright-framework-guide) | Playwright E2E test automation design guide |
-| [spreadsheet-like-db-editor](https://github.com/earthHa11Queen/spreadsheet-like-db-editor) | Sample application used to generate the results in this repository |
-| [vpsy-concept](https://github.com/earthHa11Queen/vpsy-concept) | The root concept behind this architecture |
+| [mirror-framework](https://github.com/earthHa23Queen/mirror-framework) | Test scenario generation using domain definition and boolean operations |
+| [playwright-framework-guide](https://github.com/earthHa23Queen/playwright-framework-guide) | Playwright E2E test automation design guide |
+| [spreadsheet-like-db-editor](https://github.com/earthHa23Queen/spreadsheet-like-db-editor) | Sample application used to generate the results in this repository |
+| [vpsy-concept](https://github.com/earthHa23Queen/vpsy-concept) | The root concept behind this architecture |
 
 ---
 
@@ -371,7 +371,7 @@ see [SECURITY.md](./SECURITY.md).
 TypeScript/JavaScript・Javaのソースコード、ReactアプリケーションのUI画面遷移・UI要素を解析し、
 テスト設計・AI入力前処理のためのデータを出力する静的解析ツール群です。
 
-[VPSY](https://github.com/earthHa11Queen/vpsy-concept)の実現に向けたアーキテクチャ構想の一部です。
+[VPSY](https://github.com/earthHa23Queen/vpsy-concept)の実現に向けたアーキテクチャ構想の一部です。
 
 ---
 
@@ -385,7 +385,7 @@ TypeScript/JavaScript・Javaのソースコード、Reactアプリケーショ�
 | `transition_react` | 画面遷移パス | E2Eテストシナリオ生成 |
 | `ui_element_react` | 画面単位のUI要素 | Page Object生成・テスト仕様書作成 |
 
-この3種の出力データが揃うことで、[mirror-framework](https://github.com/earthHa11Queen/mirror-framework)とAIによるテスト仕様書自動生成への完全な入力層が構成されます。
+この3種の出力データが揃うことで、[mirror-framework](https://github.com/earthHa23Queen/mirror-framework)とAIによるテスト仕様書自動生成への完全な入力層が構成されます。
 
 ---
 
@@ -496,7 +496,7 @@ chmod +x exec_shells/all_exec.sh
 ## サンプル出力
 
 `results/tsjs/`・`results/transition_react/`・`results/ui_element_react/`には
-[spreadsheet-like-db-editor](https://github.com/earthHa11Queen/spreadsheet-like-db-editor)
+[spreadsheet-like-db-editor](https://github.com/earthHa23Queen/spreadsheet-like-db-editor)
 の解析結果が含まれています。
 
 ```
@@ -525,7 +525,7 @@ playwright-framework-guide
 ```
 
 全リポジトリは感情プロセスの計算モデルであるVPSYの実現に向けたアーキテクチャ構想を共通の根拠として持っています。
-→ [architecture-concept](https://github.com/earthHa11Queen)（公開予定）
+→ [architecture-concept](https://github.com/earthHa23Queen)（公開予定）
 
 ---
 
@@ -575,7 +575,7 @@ playwright-framework-guide
 
 | リポジトリ | 概要 |
 |---|---|
-| [mirror-framework](https://github.com/earthHa11Queen/mirror-framework) | ドメインとboolean演算によるテストシナリオ生成フレームワーク |
-| [playwright-framework-guide](https://github.com/earthHa11Queen/playwright-framework-guide) | Playwright E2Eテスト自動化システムの設計ガイド |
-| [spreadsheet-like-db-editor](https://github.com/earthHa11Queen/spreadsheet-like-db-editor) | 本リポジトリのサンプル出力の解析対象アプリ |
-| [vpsy-concept](https://github.com/earthHa11Queen/vpsy-concept) | このアーキテクチャの根幹となる構想 |
+| [mirror-framework](https://github.com/earthHa23Queen/mirror-framework) | ドメインとboolean演算によるテストシナリオ生成フレームワーク |
+| [playwright-framework-guide](https://github.com/earthHa23Queen/playwright-framework-guide) | Playwright E2Eテスト自動化システムの設計ガイド |
+| [spreadsheet-like-db-editor](https://github.com/earthHa23Queen/spreadsheet-like-db-editor) | 本リポジトリのサンプル出力の解析対象アプリ |
+| [vpsy-concept](https://github.com/earthHa23Queen/vpsy-concept) | このアーキテクチャの根幹となる構想 |
