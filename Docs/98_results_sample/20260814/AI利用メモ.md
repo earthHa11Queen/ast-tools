@@ -22,23 +22,23 @@ input：testcode_generation_input.tar.gz
 
 ## ChatGPT
 
-実行時間：2026/08/13 07:45頃～08:30頃まで処理にかかる
-製品：ChatGPT
-ライセンス：Plus
-使用方法： ChatGPT Work をWebブラウザから実行
-プロンプト実行回数：1回
-LLM：5.6 Sol
-エフォート：中程度
-生成物：junit_test_artifact
+実行時間：2026/08/13 07:45頃～08:30頃まで処理にかかる  
+製品：ChatGPT  
+ライセンス：Plusc 
+使用方法： ChatGPT Work をWebブラウザから実行c 
+プロンプト実行回数：1回  
+LLM：5.6 Sol  
+エフォート：中程度  
+生成物：junit_test_artifact  
 
 ## Claude
 
-実行時間：2026/08/13 08:00頃開始し、途中2回「続行」ボタンが現れ押下した上で、放置。おそらく10:30頃には生成完了
-製品：Claude
-ライセンス：Pro
-使用方法： Claude Chato をWebブラウザから実行
-プロンプト実行回数：1回
-LLM：Opus 5
-エフォート：高
-クレジット：$40ほど消費した
-生成物：junit_testcode.zip
+実行時間：2026/08/13 08:00頃開始し、途中2回「続行」ボタンが現れ押下した上で、放置。おそらく10:30頃には生成完了  
+製品：Claude  
+ライセンス：Pro  
+使用方法： Claude Chat をWebブラウザから実行  
+プロンプト実行回数：1回  
+LLM：Opus 5  
+エフォート：高  
+クレジット：$40ほど消費した  
+生成物：junit_testcode.zip  
