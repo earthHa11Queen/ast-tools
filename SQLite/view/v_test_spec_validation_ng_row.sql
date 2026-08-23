@@ -1,0 +1,48 @@
+CREATE VIEW IF NOT EXISTS v_test_spec_validation_ng_row AS
+SELECT validationRowId
+FROM v_test_spec_validation_ng_required
+
+UNION
+
+SELECT validationRowId
+FROM v_test_spec_validation_ng_target
+
+UNION
+
+SELECT validationRowId
+FROM v_test_spec_validation_ng_generator_target
+
+UNION
+
+SELECT validationRowId
+FROM v_test_spec_validation_ng_x
+
+UNION
+
+SELECT validationRowId
+FROM v_test_spec_validation_ng_y
+
+UNION
+
+SELECT validationRowId
+FROM v_test_spec_validation_ng_z
+
+UNION
+
+SELECT validationRowId
+FROM v_test_spec_validation_ng_generator_rule
+
+UNION
+
+SELECT validationRowId
+FROM v_test_spec_validation_ng_case_no_duplicate
+
+UNION
+
+SELECT validationRowId
+FROM v_test_spec_validation_ng_case_duplicate
+
+UNION
+
+SELECT validationRowId
+FROM v_test_spec_validation_ng_y_coverage;

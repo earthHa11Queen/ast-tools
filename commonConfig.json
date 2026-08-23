@@ -1,5 +1,0 @@
-{
-  "outputDir": "./results",
-  "encoding": "utf-8",
-  "supportedLanguages": ["typescript", "javascript", "java"]
-}

@@ -26,182 +26,99 @@ and AI-assisted test specification generation.
 
 ---
 
-## Supported Languages / Parsers
+## Actual Measurements
 
-### Source Code Parser (tsjs_ast / java_ast)
-
-| Language | Status |
-|---|---|
-| TypeScript / JavaScript | ✅ Implemented (ts-morph) |
-| Java | ✅ Implemented (JavaParser) |
-| Python | 🔲 Planned |
-| PHP | 🔲 Planned |
-| Go | 🔲 Planned |
-| HTML / CSS | 🔲 Planned |
-
-### Screen Transition Parser (transition_react)
-
-| Framework | Status |
-|---|---|
-| React (React Router v6) | ✅ Implemented (ts-morph) |
-| Vue | 🔲 Planned |
-| Angular | 🔲 Planned |
-
-### UI Element Parser (ui_element_react)
-
-| Framework | Status |
-|---|---|
-| React (MUI compatible) | ✅ Implemented (ts-morph) |
-| Vue | 🔲 Planned |
-| Angular | 🔲 Planned |
+- Generation of test specifications: 13,583 cases
+  (Two independent artifacts with different architectures matched perfectly at the CaseNo level)
+- External validation using mutation testing (PIT):
+  - Pure function classes: Test Strength 100%
+  - Thin delegation layer classes: Test Strength 89%
+  - Classes with actual business logic: Test Strength 49%
+- Initial application to Apache Commons Lang3 (Defects4J target project):
+  Generated 68,607 cases
+- Compilation errors upon initial injection of generated test code into the actual project:
+  3 errors for approximately 630,000 lines (the cause converged to a single type)
 
 ---
 
-## Repository Structure
+## Verification Status (As of August 2026)
 
-```
-ast-tools/
-├── commonConfig.json               # Shared configuration
-├── tsjs_ast/                       # TypeScript / JavaScript source parser
-│   ├── config.ts                   # ⚙️ User configuration — set your paths here
-│   ├── main.ts
-│   └── src/
-├── java_ast/                       # Java source parser
-│   ├── config.json                 # ⚙️ User configuration — set your paths here
-│   └── src/main/java/com/ast_tool/
-├── transition_react/               # Screen transition parser (React Router v6)
-│   ├── config.ts                   # ⚙️ User configuration — set your paths here
-│   ├── main.ts
-│   └── src/
-│       ├── RouteDefinitionParser.ts
-│       ├── TransitionExtractor.ts
-│       ├── AdjacencyTableBuilder.ts
-│       ├── PathTableBuilder.ts
-│       ├── PathCostClassifier.ts
-│       └── AdjacencyOutputWriter.ts
-├── ui_element_react/               # UI element parser (React + MUI)
-│   ├── config.ts                   # ⚙️ User configuration — set your paths here
-│   ├── main.ts
-│   └── src/
-│       ├── types.ts
-│       ├── ComponentParser.ts
-│       ├── ElementExtractor.ts
-│       ├── LabelResolver.ts
-│       ├── ScopeAnalyzer.ts
-│       ├── MirrorAxisMapper.ts
-│       └── UiElementOutputWriter.ts
-├── exec_shells/
-│   └── all_exec.sh
-└── results/
-    ├── tsjs/                       # Sample — spreadsheet-like-db-editor (source analysis)
-    ├── transition_react/           # Sample — spreadsheet-like-db-editor (screen transitions)
-    └── ui_element_react/           # Sample — spreadsheet-like-db-editor (UI elements)
-```
+**Verified**  
+- Target Language: Java (Gradle / Maven, Spring Boot)
+- Execution Record: Approximately 1,200 cases executed on an actual project within a personal project
+- External Metrics: Measured by applying PIT (Mutation Testing) to 3 classes
+
+**Unverified**  
+- Large-scale demonstration on general OSS (For Apache Commons Lang3, only generation has been confirmed; execution is incomplete)
+- End-to-end execution for target languages other than Java
+
+**Known Limitations**  
+- Weak validation for structured data (contents of Collections / Maps / DTOs)
+- Lacks an axis to exhaustively cover the response patterns of dependencies (collaborators)
+- Can detect discrepancies between documentation and implementation, but determining whether that discrepancy is an "intentional design decision" or an "oversight" is beyond the scope of problems this tool handles
+
+This project is published not as a completed tool, but as an ongoing implementation record of personal research.
 
 ---
 
-## Getting Started
+## Overall Architecture
 
-### TypeScript / JavaScript Source Parser
+```text
+Source Code
+    │
+    ▼
+AST Parsing (java_ast / typescript_ast ...)
+    │  Extract syntactic information as CSV
+    ▼
+Cleaner (java_ast_cleaner ...)
+    │  Decompose complex types / DTOs into flat observational units
+    ▼
+SQLite (Cartesian product with test perspective catalog & pruning)
+    │  Deterministically finalize the set of cases
+    ▼
+Code Generation by LLM
+    │  Convert finalized cases into Java test code
+    ▼
+Runtime (java_test_library)
+    │  Generate and inject test data at runtime
+    ▼
+Evidence
+    Record used values and execution results in a reproducible form
+```
 
-**Prerequisites:** Node.js 18+
+## Quick Start
+
+This is the minimal set of steps to run part of the pipeline end-to-end,
+using the simplest possible target: a method with no arguments.
+Running the full pipeline (case finalization via SQLite, prompt generation
+for the LLM, and injecting generated code into an actual project) requires
+additional setup and is not covered here.
+
+### 1. Run Java AST parsing
 
 ```bash
-cd tsjs_ast
-npm install
+cd Java/java_ast
+# Set the path to the project you want to analyze in config.json
+mvn compile exec:java
 ```
 
-Edit `config.ts`:
+CSV files (method-level, field-level, and source-file-level) are output
+under `Java/results/`.
 
-```typescript
-export const TARGET_APP_DIR = "YOUR APP PATH";
-export const DEFAULT_OUTPUT_DIR = "../results/tsjs";
-export const TARGET_APP_NAME = "your-app-name";
-```
-
-Run:
+### 2. Inspect the output
 
 ```bash
-npx ts-node main.ts
+head -5 Java/results/ast_method_level.csv
 ```
 
----
+You should see one row per method in the target class, along with its
+signature, return type, and parameter information.
 
-### Java Source Parser
-
-**Prerequisites:** Java 17+, Maven 3.8+
+### 3. Verify the test runtime in isolation
 
 ```bash
-cd java_ast
-mvn clean package -f pom.xml
-```
-
-Edit `config.json`:
-
-```json
-{
-  "TargetAppDir": "YOUR APP PATH",
-  "DefaultOutputDir": "YOUR RESULT PATH"
-}
-```
-
-Run:
-
-```bash
-java -Dfile.encoding=UTF-8 -jar target/java-ast-1.0.0-with-dependencies.jar ./config.json
-```
-
----
-
-### Screen Transition Parser (React)
-
-**Prerequisites:** Node.js 18+
-
-```bash
-cd transition_react
-npm install
-```
-
-Edit `config.ts`:
-
-```typescript
-export const TARGET_APP_DIR = "YOUR APP PATH";
-export const DEFAULT_OUTPUT_DIR = "../results/transition_react";
-export const TARGET_APP_NAME = "your-app-name";
-export const START_PATH = "/";
-```
-
-Run:
-
-```bash
-npx ts-node main.ts
-```
-
-#### Output files
-
-| File | Contents |
-|---|---|
-| `adjacency_table.csv` | All screen transition edges (from/to path, component, transition type) |
-| `path_forward.csv` | Forward paths from start — with cost and test phase |
-| `path_reverse.csv` | Reverse paths back to start — with cost and test phase |
-| `path_summary.json` | maxCost, total paths per phase, unresolved paths |
-
-#### Path cost and test phase
-
-| Cost | Test Phase |
-|---|---|
-| 1 to (maxCost - 1) | Integration test |
-| maxCost | System test |
-
----
-
-### UI Element Parser (React)
-
-**Prerequisites:** Node.js 18+
-
-```bash
-cd ui_element_react
-npm install
+cd Java/java_test_library
+mvn clean install
 ```
 
 Edit `config.ts`:
@@ -389,102 +306,103 @@ TypeScript/JavaScript・Javaのソースコード、Reactアプリケーショ�
 
 ---
 
-## 対応言語・フレームワーク
+## 全体アーキテクチャ
 
-### ソースコードパーサー
+```text
+ソースコード
+    │
+    ▼
+AST解析（java_ast / typescript_ast ...）
+    │  構文情報を CSV として抽出
+    ▼
+Cleaner（java_ast_cleaner ...）
+    │  複合型・DTOをフラットな観測単位へ分解
+    ▼
+SQLite（テスト観点カタログとの直積・剪定）
+    │  ケース集合を決定論的に確定
+    ▼
+LLMによるコード生成
+    │  確定済みケースをJavaのテストコードへ変換
+    ▼
+Runtime（java_test_library）
+    │  実行時にテストデータを生成・注入
+    ▼
+Evidence
+    使用された値と実行結果を記録し、再現可能な形で保持
+```
 
-| 言語 | 状態 |
-|---|---|
-| TypeScript / JavaScript | ✅ 実装済み（ts-morph使用） |
-| Java | ✅ 実装済み（JavaParser使用） |
-| Python | 🔲 実装予定 |
-| PHP | 🔲 実装予定 |
-| Go | 🔲 実装予定 |
-| HTML / CSS | 🔲 実装予定 |
-
-### 画面遷移パーサー
-
-| フレームワーク | 状態 |
-|---|---|
-| React（React Router v6） | ✅ 実装済み（ts-morph使用） |
-| Vue | 🔲 実装予定 |
-| Angular | 🔲 実装予定 |
-
-### UI要素パーサー
-
-| フレームワーク | 状態 |
-|---|---|
-| React（MUI対応） | ✅ 実装済み（ts-morph使用） |
-| Vue | 🔲 実装予定 |
-| Angular | 🔲 実装予定 |
+各層は独立しており、上流の出力形式が変わらない限り、下流を差し替えても動作します。
 
 ---
 
-## 使い方
-
-### TypeScript / JavaScript ソースコードパーサー
+## ディレクトリ構成
 
 ```bash
-cd tsjs_ast && npm install
-# config.tsを編集してTARGET_APP_DIRを設定
-npx ts-node main.ts
+ast-tools/
+├── Java/                     # Java向けパイプライン
+│   ├── java_ast/             # AST解析（JavaParser）
+│   ├── java_ast_cleaner/     # 型の正規化・複合型の分解
+│   ├── java_test_library/    # 実行時ランタイム（テストデータ生成・Evidence記録）
+│   └── results/              # 解析結果の出力先
+│
+├── Typescript/                # TypeScript / JavaScript向けパイプライン
+│   ├── typescript_ast/
+│   ├── typescript_ast_cleaner/
+│   └── typescript_test_library/
+│
+├── React/                     # React向け画面解析
+│   ├── react_transition/      # 画面遷移パス抽出
+│   └── react_ui_element/      # UI要素抽出
+│
+├── Playwright/                 # E2Eテスト設計支援
+│   ├── dom_tree_ast/          # DOM構造の静的解析
+│   └── dom_playwright/        # Playwright実行連携
+│
+├── SQLite/                     # 分析基盤（テーブル定義・ビュー・SQL群）
+│   ├── create/
+│   ├── select/
+│   ├── view/
+│   ├── dml_insert/
+│   ├── dml_update/
+│   ├── dml_delete/
+│   └── drop/
+│
+├── BackendTest/                # 言語別のテストコード生成プロンプト
+│   └── config/                 # 言語ごとのプロンプトテンプレート
+│
+├── Shells/                      # 実行用シェルスクリプト（Linux / Windows）
+│
+├── Docs/                        # 設計文書・仕様書
+│
+└── OldVersion/                  # 過去バージョン（設計判断の記録として保持）
 ```
 
-### Java ソースコードパーサー
+---
+
+## クイックスタート
+
+最も依存の少ないケース（引数を持たない単純なメソッド）を対象に、パイプラインの一部を実際に動かす手順です。
+全工程の実行には別途SQLiteのセットアップが必要ですが、ここでは「AST解析からCSV出力まで」を最短で確認します。
+
+### 1. Java AST解析を実行する
 
 ```bash
-cd java_ast && mvn clean package -f pom.xml
-# config.jsonを編集してTargetAppDirを設定
-java -Dfile.encoding=UTF-8 -jar target/java-ast-1.0.0-with-dependencies.jar ./config.json
+cd Java/java_ast
+# config.json に解析対象のプロジェクトパスを設定する
+mvn compile exec:java
 ```
 
-### 画面遷移パーサー（React）
+`Java/results/` 配下に、メソッド・フィールド・ソースファイル単位のCSVが出力されます。
+
+### 2. 出力を確認する
 
 ```bash
-cd transition_react && npm install
-# config.tsを編集してTARGET_APP_DIRを設定
-npx ts-node main.ts
+head -5 Java/results/ast_method_level.csv
 ```
 
-#### 出力ファイル
+対象クラスのメソッド一覧が、シグネチャ・戻り値型・引数情報とともに1行1件で確認できます。
 
-| ファイル | 内容 |
-|---|---|
-| `adjacency_table.csv` | 全画面遷移エッジ（遷移元・遷移先パス、コンポーネント名、遷移種別） |
-| `path_forward.csv` | 起点からの全順行パス（コスト・テスト工程区分付き） |
-| `path_reverse.csv` | 起点への全逆行パス（コスト・テスト工程区分付き） |
-| `path_summary.json` | maxCost・工程区分ごとのパス数・未解決パスのサマリー |
-
-### UI要素パーサー（React）
-
-```bash
-cd ui_element_react && npm install
-# config.tsを編集してTARGET_APP_DIRを設定
-npx ts-node main.ts
-```
-
-#### 出力ファイル
-
-| ファイル | 内容 |
-|---|---|
-| `ui_elements.json` | 全画面のUI要素構造データ（AI入力形式） |
-| `ui_elements.csv` | 全要素のフラット形式（50以上の属性列） |
-| `ui_elements.md` | スコープグループ単位で整形したMarkdown概要 |
-
-#### 主な抽出属性
-
-| グループ | 属性 | 用途 |
-|---|---|---|
-| 識別 | id・name・className・data-testid・type・role | ロケーター特定 |
-| ラベル | labelText・placeholder・aria-label | テスト仕様書の項目名 |
-| 入力制約 | maxLength・minLength・max・min・step・pattern | 境界値テスト設計 |
-| 遷移 | href・target・formAction | transition_reactとの照合 |
-| 状態 | isRequired・isDisabled・isReadonly・isHidden | 操作対象外の識別 |
-| アクセシビリティ | aria-expanded・aria-controls・aria-haspopup | アコーディオン・モーダル識別 |
-| スコープ | parentScopeTag・siblingCount・scopeGroupId | Page ObjectのStatic Root特定 |
-| Playwright連携 | interactionType・mirrorAxisX・playwrightMethodPrefix | メソッド名の導出 |
-
-### 全パーサーをまとめて実行
+### 3. テストランタイムの単体動作を確認する
 
 ```bash
 chmod +x exec_shells/all_exec.sh

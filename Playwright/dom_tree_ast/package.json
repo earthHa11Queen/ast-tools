@@ -1,0 +1,21 @@
+{
+  "name": "dom_tree_ast",
+  "version": "0.1.0",
+  "private": true,
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/main.js",
+    "dev": "ts-node main.ts"
+  },
+  "dependencies": {
+    "iconv-lite": "^0.7.2",
+    "node-html-parser": "^9.0.1",
+    "ts-morph": "^27.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.0"
+  }
+}

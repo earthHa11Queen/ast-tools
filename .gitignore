@@ -1,0 +1,9 @@
+node_modules
+target
+*zip
+*.tar.gz
+*.code-workspace
+**/results/*.csv
+**/results/*.xlsx
+**/results/*.md
+**/results/*/**

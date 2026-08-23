@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "incremental": true,
+    "moduleResolution": "node",
+    "ignoreDeprecations": "6.0",
+    "rootDir": "./",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "types": [
+      "node",
+      "ts-morph"
+    ]
+  },
+  "include": ["main.ts", "src/**/*"],
+  "exclude": ["node_modules"],
+}

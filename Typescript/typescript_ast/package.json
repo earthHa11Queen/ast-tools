@@ -1,0 +1,20 @@
+{
+  "name": "tsjs_ast",
+  "version": "0.1.0",
+  "private": true,
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/main.js",
+    "dev": "ts-node main.ts"
+  },
+  "dependencies": {
+    "iconv-lite": "^0.7.2",
+    "ts-morph": "^18.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.5.0"
+  }
+}

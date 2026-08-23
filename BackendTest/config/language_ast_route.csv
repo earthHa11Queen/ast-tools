@@ -1,0 +1,4 @@
+sourceExtension,language,astConfigPath,appDirKey
+.java,java,/java_ast/config.json,targetAppDir
+.ts,typescript,/tsjs_ast/config.ts,targetAppDir
+.py,python,ここに実際の値を/区切りで入れてください。/python_ast/config.json,targetAppDir

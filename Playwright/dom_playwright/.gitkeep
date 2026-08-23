@@ -1,0 +1,5 @@
+config/config.ts
+node_modules/
+dist/
+reports/
+evidence/results/

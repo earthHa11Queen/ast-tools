@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- ===== プロジェクト基本情報 ===== -->
+  <groupId>com.ast_tool</groupId>
+  <artifactId>java-ast-v2</artifactId>
+  <version>2.0.0</version>
+  <packaging>jar</packaging>
+
+  <properties>
+    <java.version>17</java.version>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <javaparser.version>3.26.1</javaparser.version>
+    <jackson.version>2.17.1</jackson.version>
+  </properties>
+
+  <!--
+    v1からの変更点：
+    ・JSON出力を全廃したため jackson-databind は「CSV/JSON出力用」ではなく
+      「config.json 読み込み専用」の依存として残した（用途が変わった）。
+    ・opencsv は使用していない（CsvOutputで手書きのCSV組み立てを行うため、
+      tsjs_ast/dom_tree_ast等、他のast-toolsツール群との実装方式の一貫性を優先した）。
+      そのため opencsv・commons-beanutils への依存はここで削除した。
+    ・javaparser-symbol-solver-core も現状のコードでは使用していないため削除した
+      （戻り値型の完全修飾名解決等が将来必要になれば再度追加する）。
+  -->
+  <dependencies>
+
+    <!-- ===== JavaParser: Javaソースを構文解析するコア ===== -->
+    <!-- Dual-licensed: Apache-2.0 OR LGPL-3.0。本プロジェクトはApache License 2.0を選択して使用する -->
+    <dependency>
+      <groupId>com.github.javaparser</groupId>
+      <artifactId>javaparser-core</artifactId>
+      <version>${javaparser.version}</version>
+    </dependency>
+
+    <!-- ===== Jackson: config.json の読み込みにのみ使用（出力には使用しない）===== -->
+    <!-- License: Apache-2.0 -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+
+      <!-- ===== Mavenコンパイラ設定 ===== -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.13.0</version>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+          <encoding>UTF-8</encoding>
+        </configuration>
+      </plugin>
+
+      <!-- ===== 実行可能なfat jar（uber jar）を作るプラグイン ===== -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.5.3</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <transformers>
+                <transformer implementation=
+                  "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>com.ast_tool.Main</mainClass>
+                </transformer>
+              </transformers>
+              <shadedArtifactAttached>true</shadedArtifactAttached>
+              <shadedClassifierName>with-dependencies</shadedClassifierName>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
+  </build>
+
+</project>

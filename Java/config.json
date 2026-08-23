@@ -1,0 +1,14 @@
+{
+    "language": "java",
+    "outputDir": "./results",
+    "targetAppDir": "YOUR-APP-PATH",
+    "targetAppName": "YOUR-APP-NAME",
+
+    "sourceFileCsvFilename": "ast_source_file_level.csv",
+    "methodCsvFilename": "ast_method_level.csv",
+    "fieldCsvFilename": "ast_field_level.csv",
+    "sourceFileCsv": "ast_source_file_level.csv",
+    "methodCsv": "ast_method_level.csv",
+    "fieldCsv": "ast_field_level.csv",
+    "langDataModelsCsv": "../Docs/10_DataMaster/lang_data_models.csv"
+}

@@ -1,0 +1,12 @@
+{
+    "extensions": [
+        ".java"
+    ],
+    "csvFilename": "ast_result.csv",
+    "markdownFilename": "ast_result.md",
+    "jsonFilename": "ast_result.json",
+    "DefaultOutputDir": "YOUR-OUTPUT-DIR",
+    "TargetAppDir": "YOUR-APP-DIR",
+    "targetAppName": "YOUR-APP-NAME",
+    "encoding": "utf-8"
+}

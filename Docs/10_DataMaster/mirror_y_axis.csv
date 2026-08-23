@@ -1,0 +1,8 @@
+﻿n,y_id,domains_name,logic
+1,length_null,Null/未入力,len == 0 (if nullable)
+2,length_empty,空文字,len == 0 (if not nullable)
+3,length_min,最小桁,len == min
+4,length_min_minus_1,最小桁未満 (Underflow),len == min - 1
+5,length_max,最大桁,len == max
+6,length_max_plus_1,最大桁超過 (Overflow),len == max + 1
+7,length_normal_mid,中間値,min < len < max

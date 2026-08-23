@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS dto_data;

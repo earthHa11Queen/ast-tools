@@ -1,0 +1,72 @@
+﻿n,category_id,group_id,z_type,z_name,z_id,variants
+1,primitives,Nothing,primitives,"""基本データ型""",Nothing,Nothing
+2,primitives,string_concepts,string_concepts,"""文字列概念""",Nothing,Nothing
+3,primitives,string_concepts,unified_width,"""幅の統一性""",half-width_only,半角のみ
+4,primitives,string_concepts,unified_width,"""幅の統一性""",full-width_only,全角のみ
+5,primitives,string_concepts,unified_type,"""文字種の統一性""",letters_only,英字のみ
+6,primitives,string_concepts,unified_type,"""文字種の統一性""",numbers_only,数字のみ
+7,primitives,string_concepts,unified_type,"""文字種の統一性""",symbols_only,記号のみ
+8,primitives,string_concepts,mixed_pattern,"""混合パターン""",mixed_half-width_and_full-width,半角全角混合
+9,primitives,string_concepts,mixed_pattern,"""混合パターン""",alphanumeric_mix,英数混合
+10,primitives,string_concepts,mixed_pattern,"""混合パターン""",chaotic_mix,カオス混合
+11,primitives,numeric_concepts,numeric_concepts,"""数値概念""",Nothing,Nothing
+12,primitives,numeric_concepts,values,"""値の性質 (Integer型)""",integer_positive,整数-正
+13,primitives,numeric_concepts,values,"""値の性質 (Integer型)""",integer_negative,整数-負
+14,primitives,numeric_concepts,values,"""値の性質 (Integer型)""",integer_zero,整数-ゼロ
+15,primitives,numeric_concepts,values,"""値の性質 (Decimal型)""",decimal_positive,小数-正
+16,primitives,numeric_concepts,values,"""値の性質 (Decimal型)""",decimal_negative,小数-負
+17,primitives,numeric_concepts,values,"""値の性質 (Decimal型)""",decimal_repeating,小数-循環小数
+18,primitives,numeric_concepts,representations,"""表記の性質 (String型)""",zero-padding_enabled,ゼロ埋め-有
+19,primitives,numeric_concepts,representations,"""表記の性質 (String型)""",zero-padding_disabled,ゼロ埋め-無
+20,primitives,numeric_concepts,representations,"""表記の性質 (String型)""",sign_indication_plus_sign_included,符号明記-プラス付き
+21,primitives,numeric_concepts,representations,"""表記の性質 (String型)""",sign_indication_minus_sign_included,符号明記-マイナス付き
+22,primitives,numeric_concepts,representations,"""表記の性質 (String型)""",exponential_notation,指数表記
+23,primitives,numeric_concepts,representations,"""表記の性質 (String型)""",comma-separated,カンマ区切り
+24,structured,Nothing,structured,"""構造化データ・フォーマット""",Nothing,Nothing
+25,structured,datetime,datetime,"""日付・時刻""",Nothing,Nothing
+26,structured,datetime,logical_validity,"""論理的妥当性""",valid_value,存在する値
+27,structured,datetime,logical_validity,"""論理的妥当性""",invalid_value,存在しない値
+28,structured,datetime,logical_validity,"""論理的妥当性""",leap_year,うるう年
+29,structured,datetime,system_range,"""システム範囲""",within_valid_range,有効範囲内
+30,structured,datetime,system_range,"""システム範囲""",out_of_range,範囲外(1900年以前等)
+31,structured,datetime,datetime_format,"""表記フォーマット""",zero_padded,ゼロ埋め-有
+32,structured,datetime,datetime_format,"""表記フォーマット""",not_zero_padded,ゼロ埋め-無
+33,structured,datetime,datetime_format,"""表記フォーマット""",with_time_zone,タイムゾーン-有
+34,structured,datetime,datetime_format,"""表記フォーマット""",without_time_zone,タイムゾーン-無
+35,structured,datetime,serial_values,"""シリアル値""",unix_timestamp__seconds,Unix Timestamp-秒
+36,structured,datetime,serial_values,"""シリアル値""",unix_timestamp__milliseconds,Unix Timestamp-ミリ秒
+37,structured,datetime,serial_values,"""シリアル値""",unix_timestamp__negative,Unix Timestamp-マイナス
+38,structured,datetime,serial_values,"""シリアル値""",unix_timestamp__32_bit_boundary,Unix Timestamp-32bit境界
+39,structured,datetime,serial_values,"""シリアル値""",excel_serial__integer,Excel Serial-整数
+40,structured,datetime,serial_values,"""シリアル値""",excel_serial__decimal,Excel Serial-小数
+41,structured,datetime,serial_values,"""シリアル値""",excel_serial__negative,Excel Serial-負
+42,structured,datetime,serial_values,"""シリアル値""",excel_serial__feb_29_1900_bug,Excel Serial-1900年2月29日バグ
+43,structured,fixed_format,fixed_format,"""固定フォーマット""",Nothing,Nothing
+44,structured,fixed_format,email,"""メールアドレス""",half-width@,@半角
+45,structured,fixed_format,email,"""メールアドレス""",full-width@,@全角
+46,structured,fixed_format,email,"""メールアドレス""",invalid_domain,ドメイン不備
+47,structured,fixed_format,phone,"""電話番号""",with_hyphen,ハイフン-有
+48,structured,fixed_format,phone,"""電話番号""",without_hyphen,ハイフン-無
+49,structured,fixed_format,phone,"""電話番号""",insufficient_length,桁数不足
+50,structured,fixed_format,postal,"""郵便番号""",with_hyphen,ハイフン-有
+51,structured,fixed_format,postal,"""郵便番号""",without_hyphen,ハイフン-無
+52,structured,enum,enum,"""選択肢・コード""",Nothing,Nothing
+53,structured,enum,code_validity,"""コード値妥当性""",within_definition,定義内
+54,structured,enum,code_validity,"""コード値妥当性""",outside_the_definition,定義外
+55,technical,Nothing,technical,"""特殊・技術的パターン""",Nothing,Nothing
+56,technical,special_chars,special_chars,"""特殊文字・空白""",space,空白
+57,technical,special_chars,special_chars,"""特殊文字・空白""",line_break_code_crlf,改行コード-CRLF
+58,technical,special_chars,special_chars,"""特殊文字・空白""",line_break_code_lf,改行コード-LF
+59,technical,special_chars,special_chars,"""特殊文字・空白""",tab,タブ
+60,technical,special_chars,special_chars,"""特殊文字・空白""",control_character_null,制御文字(NULL)
+61,technical,encoding,encoding,"""マッピング・エンコード""",surrogate_pair,サロゲートペア
+62,technical,encoding,encoding,"""マッピング・エンコード""",environment-dependent_character,環境依存文字
+63,technical,encoding,encoding,"""マッピング・エンコード""",character_with_mapping_differences,マッピング差異文字
+64,technical,injection,injection,"""インジェクション攻撃""",sql,SQL
+65,technical,injection,injection,"""インジェクション攻撃""",os_command,OSコマンド
+66,technical,injection,injection,"""インジェクション攻撃""",html/script,HTML/Script
+67,technical,injection,injection,"""インジェクション攻撃""",mathematical_formula,数式(=1+1)
+68,technical,error_values,error_values,"""エラー値・Null""",db_null,DB_NULL
+69,technical,error_values,error_values,"""エラー値・Null""",null,null
+70,technical,error_values,error_values,"""エラー値・Null""",empty,Empty
+71,technical,error_values,error_values,"""エラー値・Null""",undefined,Undefined

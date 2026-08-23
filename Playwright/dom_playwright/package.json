@@ -1,0 +1,21 @@
+{
+  "name": "result-playwright",
+  "version": "0.1.0",
+  "private": true,
+  "main": "dist/tools/dom-get/main.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dom:get": "ts-node tools/dom-get/main.ts",
+    "test": "playwright test",
+    "playwright:install": "playwright install chromium"
+  },
+  "dependencies": {
+    "playwright": "^1.62.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "@types/node": "^24.13.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.0"
+  }
+}

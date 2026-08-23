@@ -1,0 +1,9 @@
+filePath,codeFence
+pom.xml,xml
+build.gradle,groovy
+build.gradle.kts,kotlin
+settings.gradle,groovy
+settings.gradle.kts,kotlin
+gradle.properties,properties
+gradle/wrapper/gradle-wrapper.properties,properties
+gradle/libs.versions.toml,toml

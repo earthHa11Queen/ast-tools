@@ -1,0 +1,258 @@
+# ==============================================================================
+# The Mirror Framework: E2E Transition Definition Schema
+# Version: 1.0.0
+# Description: 3-Dimensional Definition for E2E Test Generation based on Set Theory
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# [X-Axis] Target DOM Elements (Physical Node Domain)
+# 数学的定義: ∀x ∈ X, x is a bounded interactable node in the DOM tree.
+# ------------------------------------------------------------------------------
+x_axis:
+  definition: "操作の対象となる物理的なHTML要素の完全集合"
+  hierarchy:
+    - id: navigation_triggers
+      name: "コンテキスト移動トリガー (Navigation Nodes)"
+      subsets:
+        - id: anchor_link
+          name: "アンカーリンク"
+          tag: "a"
+          attribute: "href"
+        - id: button_submit
+          name: "送信ボタン"
+          tag: "button"
+          attribute: "type='submit'"
+        - id: button_reset
+          name: "リセットボタン"
+          tag: "button"
+          attribute: "type='reset'"
+        - id: button_normal
+          name: "汎用ボタン"
+          tag: "button"
+          attribute: "type='button'"
+        - id: input_submit
+          name: "送信インプット"
+          tag: "input"
+          attribute: "type='submit'"
+        - id: input_image
+          name: "画像送信インプット"
+          tag: "input"
+          attribute: "type='image'"
+
+    - id: state_mutators
+      name: "状態・ペイロード保持要素 (State Mutator Nodes)"
+      subsets:
+        - id: text_input_group
+          name: "テキスト入力系"
+          subsets:
+            - id: input_text
+              name: "単一テキスト"
+              tag: "input"
+              attribute: "type='text'"
+            - id: input_password
+              name: "パスワード"
+              tag: "input"
+              attribute: "type='password'"
+            - id: input_email
+              name: "メールアドレス"
+              tag: "input"
+              attribute: "type='email'"
+            - id: input_number
+              name: "数値"
+              tag: "input"
+              attribute: "type='number'"
+            - id: input_tel
+              name: "電話番号"
+              tag: "input"
+              attribute: "type='tel'"
+            - id: input_url
+              name: "URL"
+              tag: "input"
+              attribute: "type='url'"
+            - id: input_search
+              name: "検索クエリ"
+              tag: "input"
+              attribute: "type='search'"
+            - id: textarea_multiline
+              name: "複数行テキスト"
+              tag: "textarea"
+              attribute: "none"
+        - id: binary_input_group
+          name: "真偽・選択系"
+          subsets:
+            - id: input_checkbox
+              name: "チェックボックス (複数選択可)"
+              tag: "input"
+              attribute: "type='checkbox'"
+            - id: input_radio
+              name: "ラジオボタン (排他選択)"
+              tag: "input"
+              attribute: "type='radio'"
+            - id: select_single
+              name: "単一選択ドロップダウン"
+              tag: "select"
+              attribute: "none"
+            - id: select_multiple
+              name: "複数選択リストボックス"
+              tag: "select"
+              attribute: "multiple"
+        - id: file_input_group
+          name: "ファイル操作系"
+          subsets:
+            - id: input_file_single
+              name: "単一ファイル選択"
+              tag: "input"
+              attribute: "type='file'"
+            - id: input_file_multiple
+              name: "複数ファイル選択"
+              tag: "input"
+              attribute: "type='file' and multiple"
+
+    - id: pseudo_triggers
+      name: "JS駆動型トリガー (Semantic / ARIA Nodes)"
+      subsets:
+        - id: div_button
+          name: "Div疑似ボタン"
+          tag: "div"
+          attribute: "role='button'"
+        - id: span_button
+          name: "Span疑似ボタン"
+          tag: "span"
+          attribute: "role='button'"
+        - id: i_icon_button
+          name: "Icon疑似ボタン"
+          tag: "i"
+          attribute: "role='button'"
+
+# ------------------------------------------------------------------------------
+# [Y-Axis] Physical Interactions (Action Domain)
+# 数学的定義: ∀y ∈ Y, y is a physical device interrupt applied to x.
+# ------------------------------------------------------------------------------
+y_axis:
+  definition: "人間が物理デバイスを通じて行う具体的操作の完全集合"
+  hierarchy:
+    - id: pointing_device
+      name: "ポインティングデバイス操作 (Pointer Events)"
+      subsets:
+        - id: click_primary
+          name: "左クリック"
+        - id: click_secondary
+          name: "右クリック"
+        - id: click_middle
+          name: "ミドルクリック (ホイールクリック)"
+        - id: click_double
+          name: "ダブルクリック"
+        - id: hover_enter
+          name: "ホバー進入"
+        - id: hover_leave
+          name: "ホバー離脱"
+        - id: drag_start
+          name: "ドラッグ開始"
+        - id: drag_move
+          name: "ドラッグ移動"
+        - id: drop_release
+          name: "ドロップ解放"
+
+    - id: keyboard_device
+      name: "キーボード操作 (Keyboard Events)"
+      subsets:
+        - id: data_stream
+          name: "データストリーム生成"
+          subsets:
+            - id: type_char_direct
+              name: "直接打鍵 (IME Off)"
+            - id: type_char_ime
+              name: "変換打鍵 (IME On -> 確定)"
+            - id: paste_clipboard
+              name: "クリップボード貼付 (Ctrl+V)"
+        - id: data_deletion
+          name: "データ破棄"
+          subsets:
+            - id: delete_backspace_single
+              name: "後方単一削除 (Backspace)"
+            - id: delete_forward_single
+              name: "前方単一削除 (Delete)"
+            - id: delete_continuous
+              name: "連続削除 (長押し)"
+            - id: delete_all_overwrite
+              name: "全選択上書き (Ctrl+A -> Type)"
+        - id: control_signals
+          name: "制御シグナル"
+          subsets:
+            - id: press_enter
+              name: "Enterキー打鍵"
+            - id: press_escape
+              name: "Escapeキー打鍵"
+            - id: press_tab_forward
+              name: "Tabキー打鍵 (順行フォーカス)"
+            - id: press_tab_backward
+              name: "Shift+Tabキー打鍵 (逆行フォーカス)"
+            - id: press_space
+              name: "Spaceキー打鍵"
+            - id: press_arrow_up
+              name: "上矢印キー打鍵"
+            - id: press_arrow_down
+              name: "下矢印キー打鍵"
+
+# ------------------------------------------------------------------------------
+# [Z-Axis] Transition Topology (State Change Domain)
+# 数学的定義: z = f(x, y), where f is defined by the Screen Definition Document.
+# ------------------------------------------------------------------------------
+z_axis:
+  definition: "XとYの適用により生じる、UIトポロジー上の状態遷移の形態"
+  hierarchy:
+    - id: context_shift
+      name: "コンテキストの完全移動 (Macro Transition)"
+      subsets:
+        - id: navigation_get
+          name: "データ非保持遷移 (Link Navigation)"
+        - id: navigation_post_success
+          name: "データ保持遷移・成功 (Submit -> Next Screen)"
+        - id: navigation_post_failure
+          name: "データ保持遷移・失敗 (Submit -> Same Screen with Errors)"
+        - id: navigation_back
+          name: "履歴逆行遷移 (Browser Back)"
+
+    - id: layer_overlay
+      name: "レイヤーの重畳 (Micro Transition - Z-Index)"
+      subsets:
+        - id: modal_open
+          name: "モーダル/ダイアログ展開"
+        - id: modal_close
+          name: "モーダル/ダイアログ閉鎖"
+        - id: popup_window_open
+          name: "別ウィンドウ展開 (target='_blank')"
+
+    - id: native_interrupt
+      name: "ネイティブ割り込み (Browser Native API)"
+      subsets:
+        - id: native_alert
+          name: "Alertダイアログ発生"
+        - id: native_confirm
+          name: "Confirmダイアログ発生"
+        - id: native_file_picker
+          name: "OSファイルピッカー起動"
+
+    - id: visibility_toggle
+      name: "可視性の反転 (Micro Transition - Display)"
+      subsets:
+        - id: element_expand
+          name: "要素の展開 (アコーディオン開)"
+        - id: element_collapse
+          name: "要素の折畳 (アコーディオン閉)"
+        - id: tooltip_show
+          name: "ツールチップ/ポップオーバー表示"
+        - id: tooltip_hide
+          name: "ツールチップ/ポップオーバー非表示"
+
+    - id: dom_state_mutation
+      name: "DOM状態の変異 (Micro Transition - State)"
+      subsets:
+        - id: value_update
+          name: "Value属性の更新"
+        - id: checked_state_toggle
+          name: "Checked状態の反転"
+        - id: focus_shift
+          name: "Focus状態の移動"
+        - id: async_fetch_trigger
+          name: "非同期通信の発火 (AJAX/Fetch等による部分更新)"

@@ -1,0 +1,5 @@
+INSERT INTO ast_method_level(language,filepath,classname,methodname,process1,process2,process3,process4,process5,process6,process7,process8,process9,processcontent,role,returntype,methodtype,accessmodifier,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,arg12,arg13,arg14,arg15,arg16,arg17,arg18,arg19,arg20)
+SELECT (SELECT lang FROM v_select_lang LIMIT 1) AS language,filepath,classname,methodname,CAST(process1 AS integer),CAST(process2 AS integer),CAST(process3 AS integer),CAST(process4 AS integer),CAST(process5 AS integer),CAST(process6 AS integer),CAST(process7 AS integer),CAST(process8 AS integer),CAST(process9 AS integer),processcontent,role,returntype,methodtype,accessmodifier,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,arg12,arg13,arg14,arg15,arg16,arg17,arg18,arg19,arg20
+FROM ast_method_level_tmp
+ORDER BY filepath,classname,methodname,process1,process2,process3,process4,process5,process6,process7,process8,process9
+;
