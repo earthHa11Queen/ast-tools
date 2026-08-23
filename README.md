@@ -1,28 +1,14 @@
 # ast-tools
 
-A multi-language static analysis toolkit that parses source code via AST
-and outputs structured method/class information as JSON, CSV, and Markdown.
+## What is this
 
-Designed as a preprocessing layer for test design and AI input —
-part of a larger architecture concept built toward
-[VPSY](https://github.com/earthHa23Queen/vpsy-concept).
+This is an implementation record of a test design pipeline that places a deterministic input domain model (AST parsing + SQLite) in the front stage, and limits the role of the LLM strictly to the "semantic connection of finalized information". 
 
----
+Initially, only AST parsing was implemented as a tool to facilitate the implementation of test data and test code. 
+As development progressed, I realized that by applying SQL and programmatic processing to the output of AST parsing, AI could generate test cases and test code more efficiently and accurately. Based on this realization, the design was completely revamped from the previous version. 
 
-## Overview
-
-This toolkit provides three types of parsers,
-each targeting a different dimension of application structure:
-
-| Parser | What it extracts | Primary use |
-|---|---|---|
-| `tsjs_ast` / `java_ast` | Method / class structure | AI input for unit test design |
-| `transition_react` | Screen transition paths | E2E test scenario generation |
-| `ui_element_react` | UI elements per screen | Page Object generation, test spec authoring |
-
-Together, these three outputs form the complete input layer for
-[mirror-framework](https://github.com/earthHa23Queen/mirror-framework)
-and AI-assisted test specification generation.
+It deterministically finalizes a set of test cases by combining syntactic information extracted from the source code and a test perspective catalog in SQLite, and then the LLM converts those cases into Java test code. 
+The LLM does not decide "what to test", but is limited to the role of translating already finalized specifications into executable code. 
 
 ---
 
@@ -38,7 +24,16 @@ and AI-assisted test specification generation.
   Generated 68,607 cases
 - Compilation errors upon initial injection of generated test code into the actual project:
   3 errors for approximately 630,000 lines (the cause converged to a single type)
+- Compilation errors upon initial injection of generated test code into the actual project:
+  3 errors for approximately 630,000 lines (the cause converged to a single type)
 
+Raw artifacts backing these numbers — including two independently generated
+JUnit test suites (ChatGPT and Claude, same input, same prompt), the
+generation input bundle (AST output, test specifications, instruction data),
+and the PIT mutation testing reports — are available under
+[`Docs/98_results_sample/`](./Docs/98_results_sample/).
+
+---
 ---
 
 ## Verification Status (As of August 2026)
@@ -121,139 +116,14 @@ cd Java/java_test_library
 mvn clean install
 ```
 
-Edit `config.ts`:
-
-```typescript
-export const TARGET_APP_DIR = "YOUR APP PATH";  // Path to the React app's src directory
-export const DEFAULT_OUTPUT_DIR = "../results/ui_element_react";
-export const TARGET_APP_NAME = "your-app-name";
-export const TARGET_DIR_PATTERNS = ["presentation/pages"];  // Directories to scan
-```
-
-For MUI or other component libraries, add mappings in `CUSTOM_COMPONENT_MAP`:
-
-```typescript
-export const CUSTOM_COMPONENT_MAP = [
-  { componentName: "TextField", interactionType: "text_input", mirrorAxisX: "text_input", playwrightMethodPrefix: "input" },
-  { componentName: "Button",    interactionType: "navigation_trigger", mirrorAxisX: "button_normal", playwrightMethodPrefix: "click" },
-  // add more as needed
-]
-```
-
-Run:
-
-```bash
-npx ts-node main.ts
-```
-
-#### Output files
-
-| File | Contents |
-|---|---|
-| `ui_elements.json` | Full structured data per screen (AI input format) |
-| `ui_elements.csv` | Flat format — all elements with 50+ attributes |
-| `ui_elements.md` | Human-readable overview grouped by scope |
-
-#### Key attributes extracted
-
-| Group | Attributes | Use |
-|---|---|---|
-| Identifier | id, name, className, data-testid, type, role | Locator targeting |
-| Label | labelText, placeholder, aria-label | Test spec item names |
-| Constraints | maxLength, minLength, max, min, step, pattern | Boundary value test design |
-| Transition | href, target, formAction | Link to transition_react output |
-| State | isRequired, isDisabled, isReadonly, isHidden | Operation scope filtering |
-| Accessibility | aria-expanded, aria-controls, aria-haspopup | Dynamic UI (accordion, modal) |
-| Scope | parentScopeTag, siblingCount, scopeGroupId | Page Object Static Root / Scope |
-| Playwright | interactionType, mirrorAxisX, playwrightMethodPrefix | Method name derivation |
+This runs the runtime's own unit tests, confirming the basic behavior
+of test data generation and Evidence recording.
 
 ---
 
-### Run all parsers
-
-```bash
-chmod +x exec_shells/all_exec.sh
-./exec_shells/all_exec.sh
-```
-
----
-
-## Sample Output
-
-`results/tsjs/` — method-level analysis of
-[spreadsheet-like-db-editor](https://github.com/earthHa23Queen/spreadsheet-like-db-editor)
-(frontend TypeScript).
-
-`results/transition_react/` — screen transition analysis of the same application.
-
-```
-path_summary.json:
-  maxCost: 3
-  forward: 9 paths (8 integration, 1 system)
-  reverse: 1 path
-  unresolvedPaths: []
-```
-
-`results/ui_element_react/` — UI element analysis of the same application.
-
-```
-ui_elements.csv:
-  39 elements across 8 screens
-  labelText resolved for all Button / TextField elements
-  inputProps (min/max) extracted from MUI TextField
-```
-
----
-
-## Architecture Context
-
-```
-Your application source code
-    ↓
-    ├── tsjs_ast / java_ast      → Method structure (JSON / CSV)
-    ├── transition_react         → Screen transition paths (CSV)
-    └── ui_element_react         → UI elements per screen (JSON / CSV)
-    ↓
-mirror-framework
-    → Test scenarios via boolean / domain operations
-    ↓
-playwright-framework-guide
-    → Playwright E2E test implementation
-```
-
-All repositories share a common architecture concept designed
-as a foundation for VPSY — a computational model for psychodynamics.
-→ [architecture-concept](https://github.com/earthHa23Queen) *(coming soon)*
-
----
-
-## Dependencies
-
-### tsjs_ast
-
-| Package | Version | License |
-|---|---|---|
-| ts-morph | ^18.0.0 | MIT |
-| iconv-lite | ^0.7.2 | MIT |
-| typescript | ^5.5.0 | Apache-2.0 |
-| ts-node | ^10.9.1 | MIT |
-
-### java_ast
-
-| Package | Version | License |
-|---|---|---|
-| javaparser-core | latest | Apache-2.0 / LGPL-2.1 |
-| javaparser-symbol-solver-core | latest | Apache-2.0 / LGPL-2.1 |
-| jackson-databind | latest | Apache-2.0 |
-| opencsv | latest | Apache-2.0 |
-
-### transition_react / ui_element_react
-
-| Package | Version | License |
-|---|---|---|
-| ts-morph | ^18.0.0 | MIT |
-| typescript | ^5.5.0 | Apache-2.0 |
-| ts-node | ^10.9.1 | MIT |
+Steps beyond this point — case finalization via SQLite, prompt generation
+for the LLM, and injecting generated code into an actual project — are
+documented under `Docs/`.
 
 ---
 
@@ -265,44 +135,68 @@ as a foundation for VPSY — a computational model for psychodynamics.
 
 ## Security
 
-For dependency license details and known issues,
-see [SECURITY.md](./SECURITY.md).
+Please refer to [SECURITY.md](./SECURITY.md) for details regarding the licenses of dependency libraries and known issues.
 
 ---
 
-## Related Repositories
+# ast-tools(日本語)
 
-| Repository | Description |
-|---|---|
-| [mirror-framework](https://github.com/earthHa23Queen/mirror-framework) | Test scenario generation using domain definition and boolean operations |
-| [playwright-framework-guide](https://github.com/earthHa23Queen/playwright-framework-guide) | Playwright E2E test automation design guide |
-| [spreadsheet-like-db-editor](https://github.com/earthHa23Queen/spreadsheet-like-db-editor) | Sample application used to generate the results in this repository |
-| [vpsy-concept](https://github.com/earthHa23Queen/vpsy-concept) | The root concept behind this architecture |
+## これは何か
+
+決定論的な入力領域モデル（AST解析 + SQLite）を前段に置き、LLMの役割を「確定済み情報の意味的接続」だけに限定した、テスト設計パイプラインの実装記録です。  
+
+当初は、テストデータやテストコードの実装を楽にするためのツールとして、AST解析のみを実装していました。  
+開発を進める中で、AST解析の出力にSQLやプログラムによる加工を加えることで、AIがテストケースやテストコードをより効率的かつ精度高く生成できることに気づき、その気づきをもとに前バージョンから設計を刷新しています。  
+
+ソースコードから抽出した構文情報とテスト観点カタログをSQLiteで組み合わせ、テストケースの集合を決定論的に確定させたうえで、そのケースをLLMがJavaのテストコードへ変換します。  
+LLMは「何をテストすべきか」を決めず、すでに確定した仕様を実行可能なコードへ翻訳する役割に限定されます。  
+
+---
+
+## 実測値
+
+- テスト仕様書の生成: 13,583件
+  （アーキテクチャの異なる2本の独立した生成物で、CaseNo単位で完全一致）
+- ミューテーションテスト（PIT）による外部検証:
+  - 純粋関数クラス: Test Strength 100%
+  - 薄い委譲層クラス: Test Strength 89%
+  - 実ロジックを持つクラス: Test Strength 49%
+- Apache Commons Lang3（Defects4J対象プロジェクト）への初適用:
+  68,607ケースを生成
+- 生成テストコードの実プロジェクトへの初回投入時のコンパイルエラー:
+  約63万行に対して3件（原因は1種類に収束）
+- 生成テストコードの実プロジェクトへの初回投入時のコンパイルエラー:
+  約63万行に対して3件（原因は1種類に収束）
+
+これらの数値の元データ——ChatGPTとClaude、同一インプット・同一プロンプトで
+独立生成した2種類のJUnitテストスイート、生成インプット一式
+（AST出力・テスト仕様書・テストデータ）、PITによるミューテーションテストの
+レポート——は [`Docs/98_results_sample/`](./Docs/98_results_sample/) 配下に
+実物として置いてあります。
 
 ---
 
 ---
 
-# ast-tools（日本語）
+## 検証状況（2026年8月時点）
 
-TypeScript/JavaScript・Javaのソースコード、ReactアプリケーションのUI画面遷移・UI要素を解析し、
-テスト設計・AI入力前処理のためのデータを出力する静的解析ツール群です。
+**検証済み**  
+- 対象言語: Java（Gradle / Maven, Spring Boot）
+- 実行実績: 自作プロジェクトで約1,200ケースを実プロジェクト上で実行
+- 外部指標: PIT（ミューテーションテスト）を3クラスに適用し測定
 
-[VPSY](https://github.com/earthHa23Queen/vpsy-concept)の実現に向けたアーキテクチャ構想の一部です。
+**未検証**  
+- OSS一般での大規模な実証（Apache Commons Lang3は生成のみ確認、実行は未了）
+- Java以外の対象言語でのend-to-end実行
 
----
+**既知の限界**  
+- 構造化データ（Collection / Map / DTOの中身）に対する検証の弱さ
+- 依存先（コラボレータ）の応答パターンを網羅する軸を持たない
+- ドキュメントと実装の乖離は検出できるが、
+  その乖離が「意図的な設計判断」か「見落とし」かの最終判定は、
+  本ツールの扱う問題の範囲外
 
-## 概要
-
-3種類のパーサーを提供します。
-
-| パーサー | 抽出内容 | 主な用途 |
-|---|---|---|
-| `tsjs_ast` / `java_ast` | メソッド・クラス構造 | 単体テスト設計のAI入力 |
-| `transition_react` | 画面遷移パス | E2Eテストシナリオ生成 |
-| `ui_element_react` | 画面単位のUI要素 | Page Object生成・テスト仕様書作成 |
-
-この3種の出力データが揃うことで、[mirror-framework](https://github.com/earthHa23Queen/mirror-framework)とAIによるテスト仕様書自動生成への完全な入力層が構成されます。
+このプロジェクトは完成したツールではなく、進行中の個人研究の実装記録として公開しています。
 
 ---
 
@@ -405,77 +299,15 @@ head -5 Java/results/ast_method_level.csv
 ### 3. テストランタイムの単体動作を確認する
 
 ```bash
-chmod +x exec_shells/all_exec.sh
-./exec_shells/all_exec.sh
+cd Java/java_test_library
+mvn clean install
 ```
+
+ランタイム自身の単体テストが実行され、テストデータ生成とEvidence記録の基本動作が確認できます。
 
 ---
 
-## サンプル出力
-
-`results/tsjs/`・`results/transition_react/`・`results/ui_element_react/`には
-[spreadsheet-like-db-editor](https://github.com/earthHa23Queen/spreadsheet-like-db-editor)
-の解析結果が含まれています。
-
-```
-ui_elements.csv（spreadsheet-like-db-editor）:
-  8画面・39要素
-  Button/TextFieldのlabelText全件取得済み
-  MUI TextFieldのinputProps（min/max）展開済み
-```
-
----
-
-## アーキテクチャ上の位置づけ
-
-```
-対象アプリケーションのソースコード
-    ↓
-    ├── tsjs_ast / java_ast      → メソッド構造データ（JSON / CSV）
-    ├── transition_react         → 画面遷移パステーブル（CSV）
-    └── ui_element_react         → 画面UI要素データ（JSON / CSV）
-    ↓
-mirror-framework
-    → boolean演算・ドメイン定義によるテストシナリオ算出
-    ↓
-playwright-framework-guide
-    → Playwright E2Eテストとして実装
-```
-
-全リポジトリは感情プロセスの計算モデルであるVPSYの実現に向けたアーキテクチャ構想を共通の根拠として持っています。
-→ [architecture-concept](https://github.com/earthHa23Queen)（公開予定）
-
----
-
-## 依存ライブラリ
-
-### tsjs_ast
-
-| パッケージ | バージョン | ライセンス |
-|---|---|---|
-| ts-morph | ^18.0.0 | MIT |
-| iconv-lite | ^0.7.2 | MIT |
-| typescript | ^5.5.0 | Apache-2.0 |
-| ts-node | ^10.9.1 | MIT |
-
-### java_ast
-
-| パッケージ | バージョン | ライセンス |
-|---|---|---|
-| javaparser-core | latest | Apache-2.0 / LGPL-2.1 |
-| javaparser-symbol-solver-core | latest | Apache-2.0 / LGPL-2.1 |
-| jackson-databind | latest | Apache-2.0 |
-| opencsv | latest | Apache-2.0 |
-
-### transition_react / ui_element_react
-
-| パッケージ | バージョン | ライセンス |
-|---|---|---|
-| ts-morph | ^18.0.0 | MIT |
-| typescript | ^5.5.0 | Apache-2.0 |
-| ts-node | ^10.9.1 | MIT |
-
----
+これより先（SQLiteによるケース確定、LLMへのプロンプト生成、生成コードの実プロジェクトへの投入）は `Docs/` 配下の設計文書を参照してください。
 
 ## ライセンス
 
@@ -486,14 +318,3 @@ playwright-framework-guide
 ## セキュリティ
 
 依存ライブラリのライセンス詳細・既知の問題については [SECURITY.md](./SECURITY.md) を参照してください。
-
----
-
-## 関連リポジトリ
-
-| リポジトリ | 概要 |
-|---|---|
-| [mirror-framework](https://github.com/earthHa23Queen/mirror-framework) | ドメインとboolean演算によるテストシナリオ生成フレームワーク |
-| [playwright-framework-guide](https://github.com/earthHa23Queen/playwright-framework-guide) | Playwright E2Eテスト自動化システムの設計ガイド |
-| [spreadsheet-like-db-editor](https://github.com/earthHa23Queen/spreadsheet-like-db-editor) | 本リポジトリのサンプル出力の解析対象アプリ |
-| [vpsy-concept](https://github.com/earthHa23Queen/vpsy-concept) | このアーキテクチャの根幹となる構想 |
